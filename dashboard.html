@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Future Earn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background: #000; /* Pure Black Background */
+            color: #fff; 
+            min-height: 100vh;
+        }
+        
+        .header { 
+            background: linear-gradient(180deg, #1a1a1a 0%, #000 100%); 
+            padding: 30px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #333;
+        }
+
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+
+        /* Premium Gold Cards */
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .card { 
+            background: #111; 
+            padding: 20px; 
+            border-radius: 15px; 
+            border: 1px solid #222;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .card:hover { border-color: #ffde59; }
+        .card h3 { font-size: 0.75rem; color: #888; text-transform: uppercase; margin-bottom: 8px; }
+        .card p { font-size: 1.3rem; font-weight: 600; color: #ffde59; }
+
+        /* Daily Bonus Section */
+        .bonus-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #080808 100%);
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        .btn-bonus {
+            background: #ffde59;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .btn-bonus:disabled { background: #444; color: #888; cursor: not-allowed; }
+
+        .status-badge {
+            background: #222;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #444;
+        }
+        .active { color: #00ff00; border-color: #00ff00; }
+        .pending { color: #ff3333; border-color: #ff3333; }
+
+        .referral-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: #0a0a0a;
+            border-radius: 10px;
+            border: 1px dashed #444;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div style="margin-bottom: 10px;">
+        <span id="userStatusBadge" class="status-badge pending">Checking...</span>
+    </div>
+    <h2 id="userName">---</h2>
+    <p style="color: #666; font-size: 0.9rem;">Referral ID: <span id="myID" style="color: #ffde59;">--</span></p>
+</div>
+
+<div class="container">
+    <div class="bonus-card">
+        <h3 style="font-size: 1rem;">Daily Cashback</h3>
+        <p style="color: #888; font-size: 0.8rem; margin-top: 5px;">Claim your daily reward after ID activation</p>
+        <button class="btn-bonus" id="claimBonusBtn" disabled>Claim Daily Bonus</button>
+        <p id="bonusMsg" style="font-size: 0.7rem; margin-top: 10px; color: #ffde59;"></p>
+    </div>
+
+    <div class="card-grid">
+        <div class="card"><h3>Total Wallet</h3><p>₹<span id="wallet">0</span></p></div>
+        <div class="card"><h3>Pairs</h3><p id="pairs">0</p></div>
+        <div class="card"><h3>Left Team</h3><p id="leftTeam">0</p></div>
+        <div class="card"><h3>Right Team</h3><p id="rightTeam">0</p></div>
+    </div>
+
+    <div class="referral-box">
+        <p style="font-size: 0.8rem; color: #888;">Future Earning 👩‍❤️‍👨</p>
+        <button id="copyBtn" style="background: none; border: none; color: #ffde59; cursor: pointer; font-size: 1rem; margin-top: 5px;">💸💸💸💸💸</button>
+    </div>
+     <button onclick="window.location.href='buy.html'" style="width:100%; padding:10px; background:#ffde59; color:#000; border:none; border-radius:8px; font-weight:600; margin-top:10px;">
+    BUY Plan
+</button>
+    <button onclick="window.location.href='profile.html'" style="width:100%; padding:10px; background:#ffde59; color:#000; border:none; border-radius:8px; font-weight:600; margin-top:10px;">
+    Account info
+</button>
+     <button onclick="window.location.href='tree.html'" style="width:100%; padding:10px; background:#ffde59; color:#000; border:none; border-radius:8px; font-weight:600; margin-top:10px;">
+    View My Team Tree
+</button>
+    
+     <button onclick="window.location.href='withdraw.html'" style="width:100%; padding:10px; background:#ffde59; color:#000; border:none; border-radius:8px; font-weight:600; margin-top:10px;">
+    Withdrawal
+</button>
+  
+     <button onclick="window.location.href='history.html'" style="width:100%; padding:10px; background:#ffde59; color:#000; border:none; border-radius:8px; font-weight:600; margin-top:10px;">
+    History details
+</button>
+    <button onclick="window.location.href='Terms.html'" style="width:100%; padding:10px; background:#ffde59; color:#000; border:none; border-radius:8px; font-weight:600; margin-top:10px;">
+    Terms_&_Support
+</button>
+
+    <button id="logoutBtn" style="width: 100%; margin-top: 30px; background: none; color: #ff3333; border: 1px solid #ff3333; padding: 10px; border-radius: 10px; cursor: pointer;">Logout Account</button>
+</div>
+   
+
+
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+        authDomain: "future-earn-20129.firebaseapp.com",
+        projectId: "future-earn-20129",
+        storageBucket: "future-earn-20129.firebasestorage.app",
+        messagingSenderId: "64268879881",
+        appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUserData = null;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
+            onSnapshot(userRef, (snap) => {
+                if (snap.exists()) {
+                    const data = snap.data();
+                    currentUserData = data;
+                    
+                    
+                    
+                    document.getElementById('userName').innerText = data.fullName;
+                    document.getElementById('wallet').innerText = data.wallet;
+                    document.getElementById('myID').innerText = data.referralCode;
+                    document.getElementById('pairs').innerText = data.pairsMatched || 0;
+                    document.getElementById('leftTeam').innerText = data.leftCount || 0;
+                    document.getElementById('rightTeam').innerText = data.rightCount || 0;
+
+                    // Status UI
+                    const badge = document.getElementById('userStatusBadge');
+                    badge.innerText = data.status.toUpperCase();
+                    badge.className = `status-badge ${data.status === 'active' ? 'active' : 'pending'}`;
+
+                    // Daily Bonus Logic Check
+                    const bonusBtn = document.getElementById('claimBonusBtn');
+                    const today = new Date().toDateString();
+
+                    if(data.status === 'active' && data.lastBonusDate !== today) {
+                        bonusBtn.disabled = false;
+                        document.getElementById('bonusMsg').innerText = "You have 1 pending reward!";
+                    } else {
+                        bonusBtn.disabled = true;
+                        document.getElementById('bonusMsg').innerText = data.status !== 'active' ? "Activate ID to unlock bonus" : "Next bonus available tomorrow";
+                    }
+                }
+            });
+        } else {
+            window.location.href = "index.html";
+        }
+    });
+
+    // Claim Bonus Function
+    document.getElementById('claimBonusBtn').onclick = async () => {
+        if(!currentUserData) return;
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        const today = new Date().toDateString();
+
+        try {
+            await updateDoc(userRef, {
+                wallet: increment(2), // Example: 10rs daily bonus
+                lastBonusDate: today
+            });
+            alert("Congratulations! ₹2 added to your wallet.");
+        } catch (e) {
+            alert("Error claiming bonus.");
+        }
+    };
+
+    document.getElementById('logoutBtn').onclick = () => signOut(auth);
+</script>
+</body>
+</html>
