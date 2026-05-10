@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Admin | Future Earn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #000; color: #fff; padding: 20px; }
+        .admin-container { max-width: 1100px; margin: auto; }
+        h1 { text-align: center; letter-spacing: 2px; margin-bottom: 40px; }
+        h1 span { color: #ffde59; }
+        h2 { color: #ffde59; margin: 30px 0 15px 0; border-left: 4px solid #ffde59; padding-left: 15px; font-size: 1.1rem; }
+        .table-wrapper { background: #111; border-radius: 15px; border: 1px solid #222; overflow-x: auto; margin-bottom: 40px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #1a1a1a; color: #ffde59; padding: 15px; text-align: left; font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid #222; font-size: 0.85rem; color: #ccc; }
+        .btn-approve { background: #28a745; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-approve:hover { background: #218838; transform: translateY(-1px); }
+        .utr-text { color: #ffde59; font-weight: bold; font-family: monospace; }
+        .badge-active { border: 1px solid #28a745; color: #28a745; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <h1>FUTURE EARN <span>ADMIN</span></h1>
+
+    <h2>Pending Activations (Check Payment First)</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>User Code</th>
+                    <th>UTR / Txn ID</th>
+                    <th>Sponsor</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="pendingList">
+                <tr><td colspan="5" style="text-align:center; padding:30px;">Loading pending data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Withdrawal Requests (Net Amount after 10% Cut)</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Gross Amt</th>
+                    <th>Net Payable (90%)</th>
+                    <th>UPI ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="withdrawList"></tbody>
+        </table>
+    </div>
+
+    <h2>Active Users Database</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Wallet</th>
+                    <th>L/R Count</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="approvedList"></tbody>
+        </table>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, increment, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+      authDomain: "future-earn-20129.firebaseapp.com",
+      projectId: "future-earn-20129",
+      storageBucket: "future-earn-20129.firebasestorage.app",
+      messagingSenderId: "64268879881",
+      appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // --- REALTIME LISTENERS ---
+    onSnapshot(query(collection(db, "users"), where("status", "==", "pending")), (snap) => {
+        const list = document.getElementById('pendingList');
+        list.innerHTML = snap.empty ? "<tr><td colspan='5' style='text-align:center;'>No pending IDs</td></tr>" : "";
+        snap.forEach(d => {
+            const u = d.data();
+            list.innerHTML += `<tr>
+                <td>${u.fullName}</td>
+                <td class="utr-text">${u.referralCode}</td>
+                <td style="color:#fff;">${u.utrNumber || 'MANUAL'}</td>
+                <td>${u.referBy}</td>
+                <td><button class="btn-approve" onclick="processActivation('${d.id}', '${u.referBy}', '${u.position}')">Activate</button></td>
+            </tr>`;
+        });
+    });
+
+    onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending")), (snap) => {
+        const list = document.getElementById('withdrawList');
+        list.innerHTML = snap.empty ? "<tr><td colspan='5' style='text-align:center;'>No withdrawal requests</td></tr>" : "";
+        snap.forEach(d => {
+            const w = d.data();
+            list.innerHTML += `<tr>
+                <td>${w.userName}</td>
+                <td>₹${w.grossAmount}</td>
+                <td style="color:#28a745; font-weight:bold;">₹${w.netAmount}</td>
+                <td class="utr-text">${w.upiId}</td>
+                <td><button class="btn-approve" onclick="completeWithdraw('${d.id}')">Mark Paid</button></td>
+            </tr>`;
+        });
+    });
+
+    onSnapshot(query(collection(db, "users"), where("status", "==", "active")), (snap) => {
+        const list = document.getElementById('approvedList');
+        list.innerHTML = "";
+        snap.forEach(d => {
+            const u = d.data();
+            list.innerHTML += `<tr>
+                <td>${u.fullName}</td>
+                <td>${u.referralCode}</td>
+                <td style="color:#28a745;">₹${u.wallet}</td>
+                <td>${u.leftCount || 0} / ${u.rightCount || 0}</td>
+                <td><span class="badge-active">ACTIVE</span></td>
+            </tr>`;
+        });
+    });
+// --- UPDATED ANTI-LOSS LOGIC (Only 4 Levels) ---
+async function updateBinaryTree(currentUplineCode, joinedPosition) {
+    let nextUpline = currentUplineCode;
+    let lastPosition = joinedPosition;
+    let levelCounter = 1; // Yeh counter levels ginega
+
+    // Loop tab tak chalega jab tak ADMIN na aaye YA 4 level pure na ho jayein
+    while (nextUpline !== "ADMIN" && levelCounter <= 4) { 
+        const q = query(collection(db, "users"), where("referralCode", "==", nextUpline));
+        const snap = await getDocs(q);
+        if (snap.empty) break;
+
+        const uDoc = snap.docs[0];
+        const uData = uDoc.data();
+        const uRef = doc(db, "users", uDoc.id);
+
+        let nLeft = uData.leftCount || 0;
+        let nRight = uData.rightCount || 0;
+        lastPosition === "left" ? nLeft++ : nRight++;
+
+        let totalPossiblePairs = Math.min(nLeft, nRight);
+        let alreadyPaid = uData.pairsMatched || 0;
+        
+        if (totalPossiblePairs > alreadyPaid) {
+            let newPairs = totalPossiblePairs - alreadyPaid;
+            let pairIncome = newPairs * 40; 
+            alreadyPaid = totalPossiblePairs;
+
+            // 1. Give Pair Income
+            await updateDoc(uRef, {
+                wallet: increment(pairIncome),
+                pairsMatched: alreadyPaid,
+                leftCount: nLeft,
+                rightCount: nRight
+            });
+
+            // Transaction history mein level record karna
+            await addDoc(collection(db, "transactions"), {
+                userId: uDoc.id,
+                amount: pairIncome,
+                type: `Pair Match Income (Level ${levelCounter})`,
+                timestamp: Date.now()
+            });
+
+            // 2. Give Team Bonus (₹30) to Sponsor
+            const sponsorCode = uData.referBy;
+            if(sponsorCode !== "ADMIN") {
+                const sponQ = query(collection(db, "users"), where("referralCode", "==", sponsorCode));
+                const sponSnap = await getDocs(sponQ);
+                if(!sponSnap.empty) {
+                    const sponId = sponSnap.docs[0].id;
+                    await updateDoc(doc(db, "users", sponId), { wallet: increment(30 * newPairs) });
+                }
+            }
+        } else {
+            // Pair nahi bana toh sirf count update karo
+            await updateDoc(uRef, { leftCount: nLeft, rightCount: nRight });
+        }
+
+        lastPosition = uData.position;
+        nextUpline = uData.referBy;
+        levelCounter++; // Level ko +1 badhao
+    }
+}
+
+    // --- ACTIONS ---
+    window.processActivation = async (userId, uplineCode, position) => {
+        if(!confirm("Activate ID? Rates: Welcome ₹20, Direct ₹50, Pair ₹40")) return;
+        try {
+            // Welcome Bonus (₹20)
+            await updateDoc(doc(db, "users", userId), { status: "active", wallet: increment(20) });
+            await addDoc(collection(db, "transactions"), {
+                userId: userId, amount: 20, type: "Welcome Bonus", timestamp: Date.now()
+            });
+
+            // Direct Income (₹50)
+            if(uplineCode !== "ADMIN") {
+                const qSpon = query(collection(db, "users"), where("referralCode", "==", uplineCode));
+                const sSnap = await getDocs(qSpon);
+                if(!sSnap.empty) {
+                    const sid = sSnap.docs[0].id;
+                    await updateDoc(doc(db, "users", sid), { wallet: increment(50) });
+                    await addDoc(collection(db, "transactions"), {
+                        userId: sid, amount: 50, type: "Direct Referral Income", timestamp: Date.now()
+                    });
+                }
+            }
+
+            await updateBinaryTree(uplineCode, position);
+            alert("User Activated Successfully!");
+        } catch (e) { alert("Error!"); }
+    };
+
+    window.completeWithdraw = async (id) => {
+        if(!confirm("Have you paid the Net Amount to the user?")) return;
+        await updateDoc(doc(db, "withdrawals", id), { status: "completed" });
+        alert("Withdrawal marked as Paid!");
+    };
+</script>
+</body>
+</html>

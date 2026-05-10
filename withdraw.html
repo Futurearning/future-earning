@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw Funds | Future Earn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #000; color: #fff; padding: 20px; }
+        .container { max-width: 450px; margin: auto; }
+        .wallet-card { background: #111; padding: 30px; border-radius: 20px; border: 1px solid #222; text-align: center; margin-bottom: 25px; }
+        .wallet-card h3 { color: #888; font-size: 0.8rem; }
+        .wallet-card p { font-size: 2rem; color: #ffde59; font-weight: 600; margin-top: 10px; }
+        
+        .calculation-box { background: #111; border: 1px dashed #333; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 0.85rem; }
+        .calc-row { display: flex; justify-content: space-between; margin-bottom: 5px; color: #ccc; }
+        .final-amt { border-top: 1px solid #333; margin-top: 10px; padding-top: 10px; color: #ffde59; font-weight: 600; }
+
+        input { width: 100%; padding: 12px; background: #111; border: 1px solid #222; border-radius: 8px; color: #fff; margin-bottom: 15px; outline: none; }
+        input:focus { border-color: #ffde59; }
+        .btn-withdraw { width: 100%; padding: 12px; background: #ffde59; color: #000; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="wallet-card">
+        <h3>Current Balance</h3>
+        <p>₹<span id="currentBalance">0</span></p>
+    </div>
+
+    <input type="number" id="withdrawAmount" placeholder="Enter Amount (Min ₹300)">
+    
+    <div class="calculation-box">
+        <div class="calc-row"><span>TDS (5%)</span><span id="tdsAmt">₹0</span></div>
+        <div class="calc-row"><span>Admin Charge (5%)</span><span id="adminAmt">₹0</span></div>
+        <div class="calc-row final-amt"><span>Net Payable</span><span id="netAmt">₹0</span></div>
+    </div>
+
+    <input type="text" id="upiId" placeholder="Enter UPI ID">
+    <button class="btn-withdraw" id="requestBtn">Request Payout</button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, addDoc, collection, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+const firebaseConfig = {
+        apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+        authDomain: "future-earn-20129.firebaseapp.com",
+        projectId: "future-earn-20129",
+        storageBucket: "future-earn-20129.firebasestorage.app",
+        messagingSenderId: "64268879881",
+        appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let userBalance = 0;
+    const amountInput = document.getElementById('withdrawAmount');
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            onSnapshot(doc(db, "users", user.uid), (snap) => {
+                userBalance = snap.data().wallet;
+                document.getElementById('currentBalance').innerText = userBalance;
+            });
+        }
+    });
+
+    // Real-time calculation logic
+    amountInput.oninput = () => {
+        const val = parseInt(amountInput.value) || 0;
+        const tds = val * 0.05;
+        const admin = val * 0.05;
+        const net = val - (tds + admin);
+
+        document.getElementById('tdsAmt').innerText = "₹" + tds.toFixed(2);
+        document.getElementById('adminAmt').innerText = "₹" + admin.toFixed(2);
+        document.getElementById('netAmt').innerText = "₹" + (net > 0 ? net.toFixed(2) : 0);
+    };
+
+    document.getElementById('requestBtn').onclick = async () => {
+        const amt = parseInt(amountInput.value);
+        const upi = document.getElementById('upiId').value;
+        const netPayable = amt - (amt * 0.10); // Total 10% cut
+
+        if (amt < 300) { alert("Min withdrawal ₹300 hai!"); return; }
+        if (amt > userBalance) { alert("Balance kam hai!"); return; }
+        if (!upi.includes('@')) { alert("UPI ID sahi daalein!"); return; }
+
+        try {
+            // User ke wallet se poore paise (Gross) katenge
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { wallet: increment(-amt) });
+
+            // Admin ko net amount dikhega jo usey pay karna hai
+            await addDoc(collection(db, "withdrawals"), {
+                userId: auth.currentUser.uid,
+                userName: auth.currentUser.email,
+                grossAmount: amt,
+                netAmount: netPayable, // Admin ko itna pay karna hai
+                upiId: upi,
+                status: "pending",
+                timestamp: Date.now()
+            });
+          
+          // --- YEH WALA CODE ADD KAREIN ---
+await addDoc(collection(db, "transactions"), {
+    userId: auth.currentUser.uid,
+    amount: amt, // Jitna user ne nikala (Gross Amount)
+    type: "Withdrawal Request (successful)",
+    timestamp: Date.now(),
+    isDebit: true // Isse pata chalega ki ye minus (-) hai
+});
+            
+// -------------------------------
+
+
+            alert("Request sent! Net ₹" + netPayable + " aapko bheje jayenge.");
+            window.location.href = "dashboard.html";
+        } catch (e) { alert("Error!"); }
+    };
+</script>
+</body>
+</html>

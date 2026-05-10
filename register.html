@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Earn | Join Now</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body {
+            background: linear-gradient(135deg, #1d2671 0%, #c33764 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            color: white;
+            text-align: center;
+        }
+
+        .glass-card h2 { margin-bottom: 10px; font-weight: 600; letter-spacing: 1px; }
+        .glass-card p { font-size: 0.9rem; margin-bottom: 25px; opacity: 0.8; }
+
+        .input-group { position: relative; margin-bottom: 15px; text-align: left; }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input::placeholder { color: rgba(255, 255, 255, 0.6); }
+        input:focus { border-color: #ffde59; background: rgba(255, 255, 255, 0.2); }
+
+        select option { background: #1d2671; color: white; }
+
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            background: #ffde59;
+            color: #1d2671;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-register:hover { background: #f4cf33; transform: translateY(-2px); }
+
+        .footer-text { margin-top: 20px; font-size: 0.8rem; }
+        .footer-text a { color: #ffde59; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="glass-card">
+    <h2>FUTURE EARN</h2>
+    <p>Start your financial journey with us.</p>
+
+    <div class="input-group">
+        <input type="text" id="fullName" placeholder="Enter Full Name">
+    </div>
+    <div class="input-group">
+        <input type="email" id="email" placeholder="Email Address">
+    </div>
+    <div class="input-group">
+        <input type="password" id="password" placeholder="Create Password">
+    </div>
+    <div class="input-group">
+        <input type="text" id="referBy" placeholder="Referral ID (e.g. FE1001)">
+    </div>
+    
+    <div class="input-group">
+        <select id="position">
+            <option value="left">Join Left Side</option>
+            <option value="right">Join Right Side</option>
+        </select>
+    </div>
+
+    <button class="btn-register" id="signupBtn">Register & Activate</button>
+
+    <div class="footer-text">
+        Already have an account? <a href="index.html">Login</a>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+// Aapki Firebase Config yahan aayegi
+const firebaseConfig = {
+  apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+  authDomain: "future-earn-20129.firebaseapp.com",
+  projectId: "future-earn-20129",
+  storageBucket: "future-earn-20129.firebasestorage.app",
+  messagingSenderId: "64268879881",
+  appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+document.getElementById('signupBtn').onclick = async () => {
+    const name = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const referBy = document.getElementById('referBy').value;
+    const position = document.getElementById('position').value;
+
+    if(!name || !email || !password || !referBy) {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    try {
+        // 1. Check if Upline (Referral ID) exists
+        const q = query(collection(db, "users"), where("referralCode", "==", referBy));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty && referBy !== "ADMIN") {
+            alert("Invalid Referral ID!");
+            return;
+        }
+
+        // 2. Create Auth User
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // 3. Create Unique Referral Code for New User
+        const myCode = "FE" + Math.floor(1000 + Math.random() * 9000);
+
+        // 4. Save to Firestore (Columns automatic ban jayenge)
+        await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            fullName: name,
+            email: email,
+            referralCode: myCode,
+            referBy: referBy,
+            position: position,
+            status: "pending", // Shuruat mein 199rs paid nahi hai
+            wallet: 0,
+            leftCount: 0,
+            rightCount: 0,
+            pairsMatched: 0,
+            createdAt: new Date().toISOString()
+        });
+
+        alert("Account Created! Use Code: " + myCode);
+         window.location.href = "index.html";
+
+    } catch (error) {
+        alert(error.message);
+    }
+};
+</script>
+</body>
+</html>

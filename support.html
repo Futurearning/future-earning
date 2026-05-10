@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Future Earn Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .support-container {
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo-area {
+            font-size: 28px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .status-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 25px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .help-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+            border: 1px solid transparent;
+            text-decoration: none;
+            display: block;
+            color: white;
+        }
+
+        .help-card:hover {
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .help-card i {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+
+        .whatsapp-btn {
+            background: linear-gradient(45deg, #25d366, #128c7e);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-top: 20px;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #888;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="support-container">
+    <div class="logo-area">Future Earn</div>
+    <div class="status-badge">● Online Support Active</div>
+    
+    <h3>Aapki Help Ke Liye Hum Taiyar Hain!</h3>
+    <p style="color: #ccc; font-size: 14px; margin-bottom: 30px;">Koi bhi problem ho, niche diye gaye options se humein contact karein.</p>
+
+    <a href="https://wa.me/2250767350581" class="whatsapp-btn">
+        <i class="fab fa-whatsapp"></i> Chat with Admin
+    </a>
+
+    <div class="help-card" onclick="location.href='mailto:support@futureearn.com'">
+        <i class="fas fa-envelope-open-text"></i>
+        <h4>Email Support</h4>
+        <p style="font-size: 13px; color: #bbb;">support@futureearn.com</p>
+    </div>
+
+    <div class="help-card">
+        <i class="fas fa-clock"></i>
+        <h4>Working Hours</h4>
+        <p style="font-size: 13px; color: #bbb;">Monday - Saturday (10 AM - 6 PM)</p>
+    </div>
+
+    <div class="footer-text">
+        © 2026 Future Earn Digital Networks | Private Limited
+    </div>
+</div>
+
+</body>
+</html>
