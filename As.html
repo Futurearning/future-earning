@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Admin v2.0 | Future Earn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #000; color: #fff; padding: 20px; }
+        .admin-container { max-width: 1100px; margin: auto; }
+        h1 { text-align: center; letter-spacing: 2px; margin-bottom: 40px; }
+        h1 span { color: #ffde59; }
+        h2 { color: #ffde59; margin: 30px 0 15px 0; border-left: 4px solid #ffde59; padding-left: 15px; font-size: 1.1rem; }
+        .table-wrapper { background: #111; border-radius: 15px; border: 1px solid #222; overflow-x: auto; margin-bottom: 40px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #1a1a1a; color: #ffde59; padding: 15px; text-align: left; font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid #222; font-size: 0.85rem; color: #ccc; }
+        .btn-approve { background: #28a745; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-approve:hover { background: #218838; transform: translateY(-1px); }
+        .utr-text { color: #ffde59; font-weight: bold; font-family: monospace; }
+        .badge-active { border: 1px solid #28a745; color: #28a745; padding: 4px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <h1>FUTURE EARN <span>ADMIN v2.0</span></h1>
+
+    <h2>Pending Activations (Level Heavy Plan)</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>User Code</th>
+                    <th>UTR / Txn ID</th>
+                    <th>Sponsor</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="pendingList"></tbody>
+        </table>
+    </div>
+
+    <h2>Withdrawal Requests (20% Admin Profit Cut)</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Gross Amt</th>
+                    <th>Net Payable (90%)</th>
+                    <th>UPI ID</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="withdrawList"></tbody>
+        </table>
+    </div>
+
+    <h2>Active Users Database (Check Wallets)</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Wallet Balance</th>
+                    <th>L/R Count</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="approvedList"></tbody>
+        </table>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc, increment, getDocs, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+      authDomain: "future-earn-20129.firebaseapp.com",
+      projectId: "future-earn-20129",
+      storageBucket: "future-earn-20129.firebasestorage.app",
+      messagingSenderId: "64268879881",
+      appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // --- NEW PLAN 2.0 CONFIG (LEVEL HEAVY) ---
+    const RATES = {
+        WELCOME: 20,
+        DIRECT: 60,
+        PAIR: 20,
+        LEVELS: [25, 15, 10, 5], // L2, L3, L4, L5
+        WITHDRAW_FEE: 0.10 // 20% Profit for Admin
+    };
+
+    // --- REALTIME LISTENERS ---
+
+    // 1. Pending List
+    onSnapshot(query(collection(db, "users"), where("status", "==", "pending")), (snap) => {
+        const list = document.getElementById('pendingList');
+        list.innerHTML = snap.empty ? "<tr><td colspan='5' style='text-align:center;'>No pending IDs</td></tr>" : "";
+        snap.forEach(d => {
+            const u = d.data();
+            list.innerHTML += `<tr>
+                <td>${u.fullName}</td>
+                <td class="utr-text">${u.referralCode}</td>
+                <td style="color:#fff;">${u.utrNumber || 'MANUAL'}</td>
+                <td>${u.referBy}</td>
+                <td><button class="btn-approve" onclick="processActivation('${d.id}', '${u.referBy}', '${u.position}')">Activate v2.0</button></td>
+            </tr>`;
+        });
+    });
+
+    // 2. Withdrawal List (Fix: Shows Net Payable)
+    onSnapshot(query(collection(db, "withdrawals"), where("status", "==", "pending")), (snap) => {
+        const list = document.getElementById('withdrawList');
+        list.innerHTML = snap.empty ? "<tr><td colspan='5' style='text-align:center;'>No requests</td></tr>" : "";
+        snap.forEach(d => {
+            const w = d.data();
+            const netPay = w.grossAmount * (1 - RATES.WITHDRAW_FEE); 
+            list.innerHTML += `<tr>
+                <td>${w.userName}</td>
+                <td>₹${w.grossAmount}</td>
+                <td style="color:#ffde59; font-weight:bold;">₹${netPay}</td>
+                <td class="utr-text">${w.upiId}</td>
+                <td><button class="btn-approve" onclick="completeWithdraw('${d.id}')">Mark Paid</button></td>
+            </tr>`;
+        });
+    });
+
+    // 3. Approved Users (Fix: Amount Display)
+    onSnapshot(query(collection(db, "users"), where("status", "==", "active")), (snap) => {
+        const list = document.getElementById('approvedList');
+        list.innerHTML = snap.empty ? "<tr><td colspan='5' style='text-align:center;'>No active users</td></tr>" : "";
+        snap.forEach(d => {
+            const u = d.data();
+            // Important Fix: Fallback check for wallet/balance
+            const bal = u.wallet !== undefined ? u.wallet : (u.balance !== undefined ? u.balance : 0);
+            list.innerHTML += `<tr>
+                <td>${u.fullName}</td>
+                <td>${u.referralCode}</td>
+                <td style="color:#28a745; font-weight:bold;">₹${bal}</td>
+                <td>${u.leftCount || 0} / ${u.rightCount || 0}</td>
+                <td><span class="badge-active">ACTIVE</span></td>
+            </tr>`;
+        });
+    });
+
+    // --- v2.0 CORE LOGIC ---
+
+    // Level Income logic
+    async function distributeLevelIncome(startSponsorCode) {
+        let currentSponsorCode = startSponsorCode;
+        for (let i = 0; i < RATES.LEVELS.length; i++) {
+            if (!currentSponsorCode || currentSponsorCode === "ADMIN") break;
+            const q = query(collection(db, "users"), where("referralCode", "==", currentSponsorCode));
+            const snap = await getDocs(q);
+            if (snap.empty) break;
+            const sponsorData = snap.docs[0].data();
+            const upLevelSponsor = sponsorData.referBy; 
+            if (upLevelSponsor && upLevelSponsor !== "ADMIN") {
+                const upQ = query(collection(db, "users"), where("referralCode", "==", upLevelSponsor));
+                const upSnap = await getDocs(upQ);
+                if (!upSnap.empty) {
+                    const upId = upSnap.docs[0].id;
+                    const amount = RATES.LEVELS[i];
+                    await updateDoc(doc(db, "users", upId), { wallet: increment(amount) });
+                    await addDoc(collection(db, "transactions"), {
+                        userId: upId, amount: amount, type: `Level ${i+2} Income`, timestamp: Date.now()
+                    });
+                }
+                currentSponsorCode = upLevelSponsor;
+            } else { break; }
+        }
+    }
+
+    // Binary/Pair logic
+    async function updateBinaryTree(currentUplineCode, joinedPosition) {
+        let nextUpline = currentUplineCode;
+        let lastPos = joinedPosition;
+        while (nextUpline !== "ADMIN") { 
+            const q = query(collection(db, "users"), where("referralCode", "==", nextUpline));
+            const snap = await getDocs(q);
+            if (snap.empty) break;
+            const uDoc = snap.docs[0];
+            const uData = uDoc.data();
+            let nL = uData.leftCount || 0;
+            let nR = uData.rightCount || 0;
+            lastPos === "left" ? nL++ : nR++;
+            let totalPairs = Math.min(nL, nR);
+            let alreadyPaid = uData.pairsMatched || 0;
+            let updateObj = { leftCount: nL, rightCount: nR };
+            if (totalPairs > alreadyPaid) {
+                let newPairs = totalPairs - alreadyPaid;
+                let pairIncome = newPairs * RATES.PAIR; 
+                updateObj.wallet = increment(pairIncome);
+                updateObj.pairsMatched = totalPairs;
+                await addDoc(collection(db, "transactions"), {
+                    userId: uDoc.id, amount: pairIncome, type: "Pair Income (v2.0)", timestamp: Date.now()
+                });
+            }
+            await updateDoc(doc(db, "users", uDoc.id), updateObj);
+            lastPos = uData.position;
+            nextUpline = uData.referBy;
+        }
+    }
+
+    // --- ACTIONS ---
+    window.processActivation = async (userId, uplineCode, position) => {
+        if(!confirm(`Activate v2.0 Plan? (Direct ₹${RATES.DIRECT}, Pair ₹${RATES.PAIR})`)) return;
+        try {
+            // 1. Welcome & Status
+            await updateDoc(doc(db, "users", userId), { status: "active", wallet: increment(RATES.WELCOME) });
+            // 2. Direct Income
+            if(uplineCode !== "ADMIN") {
+                const qS = query(collection(db, "users"), where("referralCode", "==", uplineCode));
+                const sS = await getDocs(qS);
+                if(!sS.empty) {
+                    const sid = sS.docs[0].id;
+                    await updateDoc(doc(db, "users", sid), { wallet: increment(RATES.DIRECT) });
+                    await addDoc(collection(db, "transactions"), { userId: sid, amount: RATES.DIRECT, type: "Direct Income", timestamp: Date.now() });
+                }
+            }
+            // 3. Level & Binary
+            await distributeLevelIncome(uplineCode);
+            await updateBinaryTree(uplineCode, position);
+            alert("Activation Successful! v2.0 Live.");
+        } catch (e) { alert("Error!"); console.error(e); }
+    };
+
+    window.completeWithdraw = async (id) => {
+        if(!confirm("Mark as Paid (after 20% admin fee)?")) return;
+        await updateDoc(doc(db, "withdrawals", id), { status: "completed" });
+        alert("Success!");
+    };
+</script>
+</body>
+</html>
