@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Future Earn Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:
+linear-gradient(135deg,#0f172a,#111827,#000);
+
+min-height:100vh;
+
+color:white;
+
+overflow-x:hidden;
+}
+
+/* HEADER */
+
+.header{
+
+padding:30px 20px;
+
+text-align:center;
+
+background:
+rgba(255,255,255,0.03);
+
+backdrop-filter:blur(10px);
+
+border-bottom:
+1px solid rgba(255,255,255,0.08);
+}
+
+.header h2{
+
+font-size:30px;
+
+font-weight:700;
+
+margin-top:10px;
+
+color:#ffde59;
+}
+
+.header p{
+
+font-size:14px;
+
+color:#aaa;
+
+margin-top:5px;
+}
+
+.status-badge{
+
+display:inline-block;
+
+padding:8px 18px;
+
+border-radius:30px;
+
+font-size:13px;
+
+font-weight:600;
+}
+
+.active{
+
+background:
+rgba(0,255,128,0.12);
+
+border:
+1px solid #00ff99;
+
+color:#00ff99;
+}
+
+.pending{
+
+background:
+rgba(255,0,0,0.1);
+
+border:
+1px solid #ff4d6d;
+
+color:#ff4d6d;
+}
+
+/* CONTAINER */
+
+.container{
+
+padding:20px;
+
+max-width:520px;
+
+margin:auto;
+}
+
+/* BONUS CARD */
+
+.bonus-card{
+
+background:
+rgba(255,255,255,0.05);
+
+border:
+1px solid rgba(255,255,255,0.08);
+
+border-radius:25px;
+
+padding:25px;
+
+text-align:center;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,0.3);
+}
+
+.bonus-card h3{
+
+font-size:22px;
+
+color:#ffde59;
+}
+
+.bonus-card p{
+
+font-size:13px;
+
+color:#aaa;
+
+margin-top:6px;
+}
+
+.btn-bonus{
+
+width:100%;
+
+padding:14px;
+
+margin-top:18px;
+
+border:none;
+
+border-radius:18px;
+
+background:
+linear-gradient(145deg,#ffde59,#ffd000);
+
+color:#111;
+
+font-size:15px;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:0.3s;
+}
+
+.btn-bonus:disabled{
+
+opacity:0.5;
+
+cursor:not-allowed;
+}
+
+/* GRID */
+
+.card-grid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:15px;
+
+margin-top:20px;
+}
+
+.card{
+
+background:
+rgba(255,255,255,0.05);
+
+border:
+1px solid rgba(255,255,255,0.08);
+
+border-radius:22px;
+
+padding:22px;
+
+text-align:center;
+}
+
+.card h3{
+
+font-size:12px;
+
+color:#999;
+
+margin-bottom:8px;
+}
+
+.card p{
+
+font-size:24px;
+
+font-weight:700;
+
+color:#ffde59;
+}
+
+/* REFERRAL */
+
+.referral-box{
+
+margin-top:20px;
+
+background:
+rgba(255,255,255,0.05);
+
+border:
+1px dashed rgba(255,255,255,0.15);
+
+padding:20px;
+
+border-radius:22px;
+
+text-align:center;
+}
+
+.referral-box p{
+
+font-size:13px;
+
+color:#aaa;
+}
+
+#copyBtn{
+
+margin-top:12px;
+
+padding:13px 18px;
+
+border:none;
+
+border-radius:16px;
+
+background:
+linear-gradient(145deg,#ffde59,#ffd000);
+
+color:#111;
+
+font-size:15px;
+
+font-weight:700;
+
+cursor:pointer;
+}
+
+/* BUTTONS */
+
+.menu-btn{
+
+width:100%;
+
+padding:14px;
+
+margin-top:12px;
+
+border:none;
+
+border-radius:18px;
+
+background:
+rgba(255,255,255,0.05);
+
+border:
+1px solid rgba(255,255,255,0.08);
+
+color:white;
+
+font-size:15px;
+
+font-weight:600;
+
+cursor:pointer;
+}
+
+.logout-btn{
+
+width:100%;
+
+padding:14px;
+
+margin-top:25px;
+
+border:none;
+
+border-radius:18px;
+
+background:
+rgba(255,0,0,0.1);
+
+border:
+1px solid #ff4d6d;
+
+color:#ff4d6d;
+
+font-size:15px;
+
+font-weight:700;
+
+cursor:pointer;
+}
+
+/* POPUP */
+
+.custom-popup-overlay{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+background:
+rgba(0,0,0,0.7);
+
+backdrop-filter:blur(6px);
+
+z-index:99999;
+
+padding:15px;
+}
+
+.custom-popup{
+
+width:100%;
+max-width:320px;
+
+padding:30px 22px;
+
+border-radius:28px;
+
+background:
+linear-gradient(145deg,#111,#1f1f1f);
+
+border:2px solid #ffde59;
+
+text-align:center;
+
+animation:popupShow 0.35s ease;
+}
+
+.popup-icon{
+
+font-size:62px;
+
+margin-bottom:12px;
+}
+
+.popup-icon.success{
+
+color:#00ff99;
+}
+
+.popup-icon.error{
+
+color:#ff4d6d;
+}
+
+.custom-popup h3{
+
+font-size:28px;
+
+color:#ffde59;
+
+margin-bottom:8px;
+}
+
+.custom-popup p{
+
+font-size:15px;
+
+line-height:22px;
+
+color:#fff;
+
+margin-bottom:22px;
+}
+
+.custom-popup button{
+
+width:100%;
+
+padding:13px;
+
+border:none;
+
+border-radius:16px;
+
+background:
+linear-gradient(145deg,#ffde59,#ffd000);
+
+color:#111;
+
+font-size:15px;
+
+font-weight:700;
+
+cursor:pointer;
+}
+
+@keyframes popupShow{
+
+0%{
+
+transform:scale(0.6);
+opacity:0;
+}
+
+100%{
+
+transform:scale(1);
+opacity:1;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+
+<span id="userStatusBadge"
+class="status-badge pending">
+
+Checking...
+
+</span>
+
+<h2 id="userName">
+
+---
+
+</h2>
+
+<p>
+
+Referral ID :
+<span id="myID"
+style="color:#ffde59;">
+
+--
+
+</span>
+
+</p>
+
+</div>
+
+<div class="container">
+
+<div class="bonus-card">
+
+<h3>
+
+🎁 Daily Cashback
+
+</h3>
+
+<p>
+
+Claim your reward every 24 hours
+
+</p>
+
+<button id="claimBonusBtn"
+class="btn-bonus"
+disabled>
+
+Claim Daily Bonus
+
+</button>
+
+<p id="bonusMsg"
+style="margin-top:10px;color:#ffde59;font-size:12px;">
+
+</p>
+
+</div>
+
+<div class="card-grid">
+
+<div class="card">
+
+<h3>Total Wallet</h3>
+
+<p>
+
+₹<span id="wallet">0</span>
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Pairs</h3>
+
+<p id="pairs">
+
+0
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Left Team</h3>
+
+<p id="leftTeam">
+
+0
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>Right Team</h3>
+
+<p id="rightTeam">
+
+0
+
+</p>
+
+</div>
+
+</div>
+
+<div class="referral-box">
+
+<p>
+
+Your Referral Code
+
+</p>
+
+<button id="copyBtn">
+
+💸 COPY CODE 💸
+
+</button>
+
+</div>
+
+<button class="menu-btn"
+onclick="window.location.href='buy.html'">
+🛒 BUY PLAN
+</button>
+  
+<button class="menu-btn"
+onclick="window.location.href='profile.html'">
+👤 ACCOUNT INFO
+</button>
+
+<button class="menu-btn"
+onclick="window.location.href='tree.html'">
+🌲 View My Team Tree
+</button>
+
+<button class="menu-btn"
+onclick="window.location.href='withdraw.html'">
+💰 WITHDRAWAL
+</button>
+
+
+<button class="menu-btn"
+onclick="window.location.href='history.html'">
+📜 HISTORY DETAILS
+</button>
+  
+  
+<button class="menu-btn"
+onclick="window.location.href='Leaderboard.html'">
+👬 LEADERBOARD
+</button>
+
+
+<button class="menu-btn"
+onclick="window.location.href='Terms.html'">
+📞 TERMS & SUPPORT
+</button>
+  
+  <button class="menu-btn"
+onclick="window.location.href='Details Page.html'">
+🗼 ABOUT DETAILS
+</button>
+
+<button id="logoutBtn"
+class="logout-btn">
+
+🚪 LOGOUT ACCOUNT
+
+</button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot,
+updateDoc,
+increment
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+/* FIREBASE */
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+
+authDomain:"future-earn-20129.firebaseapp.com",
+
+projectId:"future-earn-20129",
+
+storageBucket:"future-earn-20129.firebasestorage.app",
+
+messagingSenderId:"64268879881",
+
+appId:"1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+let currentUserData = null;
+
+/* POPUP */
+
+function showPopup(type,message){
+
+const popup =
+document.createElement("div");
+
+popup.className =
+"custom-popup-overlay";
+
+popup.innerHTML = `
+
+<div class="custom-popup">
+
+<div class="popup-icon ${type}">
+
+${type === "success" ? "✔" : "✖"}
+
+</div>
+
+<h3>
+
+${type === "success"
+? "Success"
+: "Error"}
+
+</h3>
+
+<p>${message}</p>
+
+<button id="closePopupBtn">
+
+OK
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(popup);
+
+document.getElementById(
+"closePopupBtn"
+).onclick = ()=>{
+
+popup.remove();
+
+};
+
+}
+
+/* TIMER */
+
+function startBonusTimer(seconds){
+
+const bonusBtn =
+document.getElementById(
+"claimBonusBtn"
+);
+
+const bonusMsg =
+document.getElementById(
+"bonusMsg"
+);
+
+bonusBtn.disabled = true;
+
+const timer =
+setInterval(()=>{
+
+let h =
+Math.floor(seconds / 3600);
+
+let m =
+Math.floor((seconds % 3600)/60);
+
+let s =
+seconds % 60;
+
+bonusMsg.innerText =
+`Next Bonus In ${h}h ${m}m ${s}s`;
+
+seconds--;
+
+if(seconds < 0){
+
+clearInterval(timer);
+
+bonusBtn.disabled = false;
+
+bonusMsg.innerText =
+"You can claim bonus now!";
+
+}
+
+},1000);
+
+}
+
+/* USER */
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+const userRef =
+doc(db,"users",user.uid);
+
+onSnapshot(userRef,(snap)=>{
+
+if(snap.exists()){
+
+const data =
+snap.data();
+
+currentUserData = data;
+
+document.getElementById(
+"userName"
+).innerText =
+data.fullName;
+
+document.getElementById(
+"wallet"
+).innerText =
+data.wallet || 0;
+
+document.getElementById(
+"myID"
+).innerText =
+data.referralCode;
+
+document.getElementById(
+"pairs"
+).innerText =
+data.pairsMatched || 0;
+
+document.getElementById(
+"leftTeam"
+).innerText =
+data.leftCount || 0;
+
+document.getElementById(
+"rightTeam"
+).innerText =
+data.rightCount || 0;
+
+const badge =
+document.getElementById(
+"userStatusBadge"
+);
+
+badge.innerText =
+data.status.toUpperCase();
+
+badge.className =
+`status-badge ${
+data.status === "active"
+? "active"
+: "pending"
+}`;
+
+const bonusBtn =
+document.getElementById(
+"claimBonusBtn"
+);
+
+const today =
+new Date().toDateString();
+
+if(
+data.status === "active"
+&&
+data.lastBonusDate !== today
+){
+
+bonusBtn.disabled = false;
+
+document.getElementById(
+"bonusMsg"
+).innerText =
+"You have 1 pending reward!";
+
+}else{
+
+bonusBtn.disabled = true;
+
+startBonusTimer(86400);
+
+}
+
+}
+
+});
+
+}else{
+
+window.location.href =
+"index.html";
+
+}
+
+});
+
+/* BONUS CLAIM */
+
+document.getElementById(
+"claimBonusBtn"
+).onclick = async ()=>{
+
+if(!currentUserData) return;
+
+const userRef =
+doc(
+db,
+"users",
+auth.currentUser.uid
+);
+
+const today =
+new Date().toDateString();
+
+try{
+
+await updateDoc(userRef,{
+
+wallet:increment(2),
+
+lastBonusDate:today
+
+});
+
+showPopup(
+"success",
+"₹2 Daily Bonus Added Successfully!"
+);
+
+startBonusTimer(86400);
+
+}catch(e){
+
+showPopup(
+"error",
+"Bonus Claim Failed!"
+);
+
+}
+
+};
+
+/* COPY CODE */
+
+document.getElementById(
+"copyBtn"
+).onclick = ()=>{
+
+const code =
+document.getElementById(
+"myID"
+).innerText;
+
+navigator.clipboard.writeText(code);
+
+showPopup(
+"success",
+"Referral Code Copied!"
+);
+
+};
+
+/* LOGOUT */
+
+document.getElementById(
+"logoutBtn"
+).onclick = ()=>{
+
+signOut(auth);
+
+};
+
+</script>
+</body>
+</html>
