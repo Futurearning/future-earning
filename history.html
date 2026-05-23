@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Premium History | Future Earn</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    background:
+        radial-gradient(circle at top,#0f172a 0%,#020617 65%);
+
+    color:#fff;
+
+    min-height:100vh;
+
+    padding:20px;
+
+    overflow-x:hidden;
+
+    position:relative;
+}
+
+/* Background Glow */
+
+body::before,
+body::after{
+
+    content:'';
+
+    position:fixed;
+
+    width:350px;
+    height:350px;
+
+    border-radius:50%;
+
+    filter:blur(90px);
+
+    opacity:.18;
+
+    z-index:-1;
+
+    animation:floatGlow 8s ease-in-out infinite alternate;
+}
+
+body::before{
+    background:#00d4ff;
+    top:-120px;
+    left:-120px;
+}
+
+body::after{
+    background:#ffde59;
+    bottom:-120px;
+    right:-120px;
+    animation-delay:2s;
+}
+
+@keyframes floatGlow{
+
+    from{
+        transform:translateY(0px) scale(1);
+    }
+
+    to{
+        transform:translateY(40px) scale(1.08);
+    }
+
+}
+
+/* Header */
+
+.header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    padding:18px 22px;
+
+    border-radius:22px;
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.3);
+}
+
+.back-btn{
+
+    width:48px;
+    height:48px;
+
+    border-radius:16px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-decoration:none;
+
+    color:#ffde59;
+
+    font-size:1.2rem;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.3s ease;
+}
+
+.back-btn:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.05);
+
+    box-shadow:
+        0 12px 25px rgba(255,222,89,.15);
+}
+
+.header h1{
+
+    color:#ffde59;
+
+    font-size:1.3rem;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+}
+
+/* Summary */
+
+.summary-card{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:30px;
+
+    padding:30px;
+
+    margin-bottom:28px;
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.35);
+
+    animation:cardFloat 5s ease-in-out infinite;
+}
+
+@keyframes cardFloat{
+
+    0%,100%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-6px);
+    }
+
+}
+
+.summary-title{
+
+    color:#94a3b8;
+
+    font-size:.9rem;
+
+    margin-bottom:12px;
+}
+
+.summary-amount{
+
+    font-size:2.6rem;
+
+    font-weight:700;
+
+    color:#ffde59;
+
+    text-shadow:
+        0 0 25px rgba(255,222,89,.35);
+}
+
+/* Transaction List */
+
+#txn-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+}
+
+/* Card */
+
+.txn-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:22px;
+
+    border-radius:26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.3);
+
+    transition:.35s ease;
+
+    transform-style:preserve-3d;
+}
+
+.txn-card::before{
+
+    content:'';
+
+    position:absolute;
+
+    top:-100%;
+    left:-100%;
+
+    width:250%;
+    height:250%;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent,
+            rgba(255,255,255,.08),
+            transparent
+        );
+
+    transform:rotate(25deg);
+
+    transition:.7s;
+}
+
+.txn-card:hover::before{
+
+    top:-20%;
+    left:-20%;
+}
+
+.txn-card:hover{
+
+    transform:
+        perspective(1000px)
+        rotateX(6deg)
+        rotateY(-6deg)
+        translateY(-6px);
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,.4);
+}
+
+/* Left */
+
+.txn-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+}
+
+/* Icon */
+
+.icon-wrap{
+
+    width:60px;
+    height:60px;
+
+    border-radius:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:1.4rem;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.25);
+}
+
+/* Info */
+
+.txn-info h4{
+
+    font-size:1rem;
+
+    margin-bottom:6px;
+
+    color:#fff;
+}
+
+.txn-info p{
+
+    font-size:.82rem;
+
+    color:#94a3b8;
+
+    margin-top:4px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    flex-wrap:wrap;
+
+    line-height:1.5;
+}
+
+/* Amount */
+
+.amount{
+
+    font-size:1.15rem;
+
+    font-weight:700;
+}
+
+/* Loading */
+
+.loading-text{
+
+    text-align:center;
+
+    padding:50px;
+
+    color:#94a3b8;
+
+    font-size:.95rem;
+}
+
+/* Mobile */
+
+@media(max-width:700px){
+
+    .txn-card{
+
+        padding:18px;
+    }
+
+    .summary-amount{
+
+        font-size:2rem;
+    }
+
+    .header h1{
+
+        font-size:1rem;
+    }
+
+    .amount{
+
+        font-size:1rem;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+
+<div class="header">
+
+    <a href="dashboard.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <h1>Earning History</h1>
+
+    <div style="width:48px;"></div>
+
+</div>
+
+<!-- Summary -->
+
+<div class="summary-card">
+
+    <div class="summary-title">
+        Total Transactions
+    </div>
+
+    <div class="summary-amount" id="totalTxn">
+        ₹0
+    </div>
+
+</div>
+
+<!-- List -->
+
+<div id="txn-list">
+
+    <p class="loading-text">
+        Checking session...
+    </p>
+
+</div>
+
+<script type="module">
+
+import {
+    initializeApp
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    query,
+    where,
+    onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+import {
+    getAuth,
+    onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+/* Firebase */
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+
+    authDomain: "future-earn-20129.firebaseapp.com",
+
+    projectId: "future-earn-20129",
+
+    storageBucket: "future-earn-20129.firebasestorage.app",
+
+    messagingSenderId: "64268879881",
+
+    appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+const list =
+    document.getElementById('txn-list');
+
+/* Auth */
+
+onAuthStateChanged(auth, (user) => {
+
+    if(user){
+
+        loadHistory(user.uid);
+
+    }else{
+
+        list.innerHTML = `
+
+            <p
+                style="
+                    text-align:center;
+                    padding:50px;
+                    color:#ff4444;
+                "
+            >
+                Session Expired.
+                Please Login Again.
+            </p>
+
+        `;
+    }
+
+});
+
+/* Load History */
+
+function loadHistory(uid){
+
+    const q = query(
+
+        collection(db, "transactions"),
+
+        where("userId", "==", uid)
+
+    );
+
+    onSnapshot(q, (snap) => {
+
+        if(snap.empty){
+
+            list.innerHTML = `
+
+                <p
+                    style="
+                        text-align:center;
+                        padding:40px;
+                        color:#94a3b8;
+                    "
+                >
+                    No transactions found yet.
+                </p>
+
+            `;
+
+            return;
+        }
+
+        list.innerHTML = "";
+
+        let total = 0;
+
+        const txns = [];
+
+        snap.forEach((doc) => {
+
+            txns.push(doc.data());
+
+        });
+
+        /* Latest First */
+
+        txns.sort((a,b)=>
+            (b.timestamp || 0) - (a.timestamp || 0)
+        );
+
+        txns.forEach((txn) => {
+
+            total += Number(txn.amount || 0);
+
+            const typeLower =
+                txn.type.toLowerCase();
+
+            const isDebit =
+                typeLower.includes("withdraw")
+                || txn.amount < 0;
+
+            const color =
+                isDebit ? "#ff4d4d" : "#00ff88";
+
+            const sign =
+                isDebit ? "-" : "+";
+
+            const icon =
+                isDebit
+                ? "fa-arrow-up"
+                : "fa-arrow-down";
+
+            list.innerHTML += `
+
+                <div
+                    class="txn-card"
+                    style="
+                        border-left:4px solid ${color};
+                    "
+                >
+
+                    <div class="txn-left">
+
+                        <div
+                            class="icon-wrap"
+                            style="
+                                color:${color};
+                            "
+                        >
+                            <i class="fas ${icon}"></i>
+                        </div>
+
+                        <div class="txn-info">
+
+                            <h4>
+                                ${txn.type}
+                            </h4>
+
+                            <p>
+
+                                ${
+                                    txn.timestamp
+                                    ?
+                                    new Date(
+                                        txn.timestamp
+                                    ).toLocaleDateString(
+                                        'en-IN',
+                                        {
+                                            day:'2-digit',
+                                            month:'short',
+                                            year:'numeric'
+                                        }
+                                    )
+
+                                    +
+
+                                    " • "
+
+                                    +
+
+                                    new Date(
+                                        txn.timestamp
+                                    ).toLocaleTimeString(
+                                        'en-IN',
+                                        {
+                                            hour:'2-digit',
+                                            minute:'2-digit'
+                                        }
+                                    )
+
+                                    :
+                                    'Processing...'
+                                }
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="amount"
+                        style="
+                            color:${color};
+                        "
+                    >
+
+                        ${sign}
+                        ₹${Math.abs(txn.amount)}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+        document.getElementById(
+            'totalTxn'
+        ).innerText =
+            "₹" + total;
+
+    }, (error) => {
+
+        console.error(error);
+
+        list.innerHTML = `
+
+            <p
+                style="
+                    text-align:center;
+                    padding:20px;
+                    color:red;
+                "
+            >
+                Error loading data.
+            </p>
+
+        `;
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
