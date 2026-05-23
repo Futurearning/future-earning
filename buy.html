@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Activate Premium Plan | Future Earn</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+
+    background:
+        radial-gradient(circle at top,#16213e 0%,#0f172a 40%,#020617 100%);
+
+    overflow:hidden;
+    position:relative;
+}
+
+/* Animated Background */
+
+body::before,
+body::after{
+    content:'';
+    position:absolute;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.25;
+    z-index:0;
+    animation:floatGlow 8s ease-in-out infinite alternate;
+}
+
+body::before{
+    background:#00d4ff;
+    top:-120px;
+    left:-100px;
+}
+
+body::after{
+    background:#ffde59;
+    bottom:-120px;
+    right:-100px;
+    animation-delay:2s;
+}
+
+@keyframes floatGlow{
+    from{
+        transform:translateY(0px) scale(1);
+    }
+    to{
+        transform:translateY(40px) scale(1.1);
+    }
+}
+
+/* Main Card */
+
+.box{
+
+    position:relative;
+    z-index:2;
+
+    width:100%;
+    max-width:420px;
+
+    padding:30px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45),
+        inset 0 1px 1px rgba(255,255,255,.08);
+
+    text-align:center;
+
+    transform-style:preserve-3d;
+
+    animation:cardFloat 5s ease-in-out infinite;
+}
+
+@keyframes cardFloat{
+    0%,100%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-8px);
+    }
+}
+
+h2{
+    color:#fff;
+    font-size:2rem;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.plan{
+    font-size:1rem;
+    color:#cbd5e1;
+    margin-bottom:20px;
+}
+
+.plan b{
+    color:#ffde59;
+    font-size:1.4rem;
+}
+
+/* QR */
+
+.qr-wrapper{
+
+    position:relative;
+
+    width:240px;
+    height:240px;
+
+    margin:25px auto;
+
+    border-radius:25px;
+
+    overflow:hidden;
+
+    padding:10px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.15),
+            rgba(255,255,255,.05)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.35),
+        0 0 25px rgba(0,212,255,.15);
+
+    transition:.4s ease;
+}
+
+.qr-wrapper:hover{
+    transform:
+        perspective(1000px)
+        rotateX(5deg)
+        rotateY(-5deg)
+        scale(1.03);
+}
+
+.qr-wrapper img{
+    width:100%;
+    height:100%;
+    border-radius:18px;
+    object-fit:cover;
+}
+
+/* UPI */
+
+.upi-id{
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    padding:14px;
+
+    border-radius:16px;
+
+    color:#ffde59;
+
+    font-weight:600;
+
+    margin-top:15px;
+
+    font-size:1rem;
+
+    backdrop-filter:blur(10px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+/* Payment Buttons */
+
+.payment-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:25px;
+}
+
+.pay-btn{
+
+    flex:1;
+
+    padding:14px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    color:#fff;
+
+    font-weight:600;
+
+    transition:.3s ease;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+        );
+
+    backdrop-filter:blur(12px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.pay-btn:hover{
+    transform:translateY(-4px) scale(1.04);
+    box-shadow:0 15px 30px rgba(0,212,255,.25);
+}
+
+.paytm{
+    color:#00d4ff;
+}
+
+.phonepe{
+    color:#c084fc;
+}
+
+/* Message */
+
+.msg{
+    font-size:.85rem;
+    color:#b8c1d1;
+    margin-top:25px;
+    line-height:1.8;
+}
+
+/* WhatsApp */
+
+.whatsapp-btn{
+
+    display:inline-block;
+
+    margin-top:25px;
+
+    padding:14px 24px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    color:#fff;
+
+    font-weight:600;
+
+    background:
+        linear-gradient(
+            135deg,
+            #25D366,
+            #16a34a
+        );
+
+    box-shadow:0 12px 30px rgba(37,211,102,.35);
+
+    transition:.3s ease;
+}
+
+.whatsapp-btn:hover{
+    transform:translateY(-4px) scale(1.04);
+}
+
+/* Responsive */
+
+@media(max-width:500px){
+
+    .box{
+        padding:24px;
+    }
+
+    h2{
+        font-size:1.6rem;
+    }
+
+    .payment-buttons{
+        flex-direction:column;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2>Activate Plan</h2>
+
+    <p class="plan">
+        Premium Plan Amount : <b>₹199</b>
+    </p>
+
+    <!-- QR -->
+
+    <div class="qr-wrapper">
+        <img src="buy.jpg" alt="Scan to Pay">
+    </div>
+
+    <!-- UPI -->
+
+    <div class="upi-id">
+        UPI ID : f.e-735@ptyes
+    </div>
+
+    <!-- Payment Buttons -->
+<!-- Payment Buttons -->
+
+<div class="payment-buttons">
+
+    <!-- Paytm -->
+
+    <a
+        class="pay-btn paytm"
+        href="paytmmp://pay?pa=f.e-735@ptyes&pn=FutureEarn&am=199&cu=INR"
+    >
+        Pay with Paytm
+    </a>
+
+    <!-- PhonePe -->
+
+    <a
+        class="pay-btn phonepe"
+        href="phonepe://pay?pa=f.e-735@ptyes&pn=FutureEarn&am=199&cu=INR"
+    >
+        Pay with PhonePe
+    </a>
+
+</div>
+
+<!-- WhatsApp -->
+
+<a
+    href="https://wa.me/2250767350581"
+    target="_blank"
+    class="whatsapp-btn"
+>
+    💬 Chat on WhatsApp
+</a>
+
+<!-- Message -->
+
+<p class="msg">
+
+    Payment karne ke baad apna
+    <b>Screenshot</b>
+    aur
+    <b>Referral ID</b>
+    WhatsApp par bhejein.
+
+    <br><br>
+
+    Aapki ID
+    <b>10-15 minute</b>
+    mein activate ho jayegi.
+
+</p>
+
+</body>
+</html>
