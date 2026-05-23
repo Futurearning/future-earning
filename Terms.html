@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Future Earn | Premium Terms</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    background:
+        radial-gradient(circle at top,#0f172a 0%,#020617 70%);
+
+    color:#fff;
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    padding:20px;
+
+    position:relative;
+}
+
+/* Background Glow */
+
+body::before,
+body::after{
+
+    content:'';
+
+    position:fixed;
+
+    width:350px;
+    height:350px;
+
+    border-radius:50%;
+
+    filter:blur(90px);
+
+    opacity:.18;
+
+    z-index:-1;
+
+    animation:floatGlow 8s ease-in-out infinite alternate;
+}
+
+body::before{
+    background:#00d4ff;
+    top:-120px;
+    left:-120px;
+}
+
+body::after{
+    background:#ffde59;
+    bottom:-120px;
+    right:-120px;
+    animation-delay:2s;
+}
+
+@keyframes floatGlow{
+
+    from{
+        transform:translateY(0px) scale(1);
+    }
+
+    to{
+        transform:translateY(40px) scale(1.08);
+    }
+
+}
+
+/* Container */
+
+.main-container{
+
+    max-width:650px;
+
+    margin:auto;
+}
+
+/* Header */
+
+.header{
+
+    text-align:center;
+
+    padding:40px 25px;
+
+    border-radius:35px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.35);
+
+    margin-bottom:25px;
+
+    animation:floatCard 5s ease-in-out infinite;
+}
+
+@keyframes floatCard{
+
+    0%,100%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-6px);
+    }
+
+}
+
+.logo-ring{
+
+    width:130px;
+    height:130px;
+
+    margin:auto auto 20px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        conic-gradient(
+            #00d4ff,
+            #ffde59,
+            #00d4ff
+        );
+
+    animation:rotateRing 6s linear infinite;
+
+    box-shadow:
+        0 0 40px rgba(0,212,255,.35);
+}
+
+.logo-ring::before{
+
+    content:'';
+
+    position:absolute;
+
+    width:100px;
+    height:100px;
+
+    border-radius:50%;
+
+    background:#020617;
+}
+
+.logo-inner{
+
+    position:relative;
+
+    z-index:2;
+
+    font-size:2.8rem;
+
+    color:#ffde59;
+
+    font-weight:700;
+}
+
+@keyframes rotateRing{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+.header h1{
+
+    font-size:2.3rem;
+
+    color:#ffde59;
+
+    margin-bottom:8px;
+
+    letter-spacing:1px;
+}
+
+.header p{
+
+    color:#94a3b8;
+
+    font-size:.95rem;
+}
+
+/* Cards */
+
+.section-card{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:30px;
+
+    padding:28px;
+
+    margin-bottom:25px;
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.35);
+
+    transition:.35s ease;
+
+    transform-style:preserve-3d;
+}
+
+.section-card:hover{
+
+    transform:
+        perspective(1000px)
+        rotateX(5deg)
+        rotateY(-5deg)
+        translateY(-6px);
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,.45);
+}
+
+/* Title */
+
+.section-title{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    color:#ffde59;
+
+    font-size:1.25rem;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+}
+
+.section-title i{
+
+    width:52px;
+    height:52px;
+
+    border-radius:16px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,222,89,.18),
+            rgba(255,222,89,.05)
+        );
+
+    border:1px solid rgba(255,222,89,.2);
+
+    box-shadow:
+        0 10px 25px rgba(255,222,89,.15);
+}
+
+/* Table */
+
+.table-wrap{
+
+    overflow:auto;
+
+    border-radius:20px;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    overflow:hidden;
+}
+
+th{
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffde59,
+            #f59e0b
+        );
+
+    color:#000;
+
+    padding:15px;
+
+    font-size:.95rem;
+}
+
+td{
+
+    padding:16px;
+
+    text-align:center;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+    background:
+        rgba(255,255,255,.03);
+
+    font-size:.92rem;
+}
+
+tr:hover td{
+
+    background:
+        rgba(255,255,255,.05);
+}
+
+.bonus{
+
+    color:#00ff88;
+
+    font-weight:700;
+
+    text-shadow:
+        0 0 12px rgba(0,255,136,.35);
+}
+
+/* WhatsApp */
+
+.support-text{
+
+    text-align:center;
+
+    color:#cbd5e1;
+
+    font-size:.92rem;
+
+    margin-bottom:20px;
+}
+
+.whatsapp-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    text-decoration:none;
+
+    padding:18px;
+
+    border-radius:22px;
+
+    font-weight:700;
+
+    font-size:1rem;
+
+    background:
+        linear-gradient(
+            135deg,
+            #25d366,
+            #128c7e
+        );
+
+    color:#fff;
+
+    box-shadow:
+        0 18px 35px rgba(37,211,102,.25);
+
+    transition:.35s ease;
+}
+
+.whatsapp-btn:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.03);
+}
+
+/* Terms */
+
+.terms-list{
+
+    list-style:none;
+}
+
+.terms-list li{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:14px;
+
+    margin-bottom:18px;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.03);
+
+    transition:.3s ease;
+}
+
+.terms-list li:hover{
+
+    background:
+        rgba(255,255,255,.05);
+}
+
+.terms-list i{
+
+    color:#ffde59;
+
+    margin-top:3px;
+}
+
+.terms-list b{
+
+    color:#fff;
+}
+
+/* Footer */
+
+.footer{
+
+    text-align:center;
+
+    color:#64748b;
+
+    font-size:.78rem;
+
+    margin-top:30px;
+
+    padding-bottom:20px;
+}
+
+/* Mobile */
+
+@media(max-width:700px){
+
+    .header h1{
+
+        font-size:1.8rem;
+    }
+
+    .section-title{
+
+        font-size:1.05rem;
+    }
+
+    td,th{
+
+        font-size:.82rem;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <div class="logo-ring">
+
+            <div class="logo-inner">
+                F
+            </div>
+
+        </div>
+
+        <h1>Future Earn</h1>
+
+        <p>Digital Networks Pvt. Ltd.</p>
+
+    </div>
+
+    <!-- Business Plan -->
+
+    <div class="section-card">
+
+        <div class="section-title">
+
+            <i class="fas fa-chart-line"></i>
+
+            Business Plan
+
+        </div>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Level</th>
+
+                        <th>Referral Income</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>Level 1 (Direct)</td>
+
+                        <td>₹60</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Pair Complete</td>
+
+                        <td>₹20</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Downline</td>
+
+                        <td>₹30</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="2" class="bonus">
+
+                            Daily Login Bonus :
+                            ₹2 Every Day
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Support -->
+
+    <div class="section-card">
+
+        <div class="section-title">
+
+            <i class="fas fa-headset"></i>
+
+            Support Helpdesk
+
+        </div>
+
+        <p class="support-text">
+
+            Koi bhi dikkat ho toh Admin se baat karein
+
+        </p>
+
+        <a
+            href="https://wa.me/2250767350581"
+            class="whatsapp-btn"
+        >
+
+            <i class="fab fa-whatsapp"></i>
+
+            Chat With Admin
+
+        </a>
+
+    </div>
+
+    <!-- Terms -->
+
+    <div class="section-card">
+
+        <div class="section-title">
+
+            <i class="fas fa-file-contract"></i>
+
+            Terms & Conditions
+
+        </div>
+
+        <ul class="terms-list">
+
+            <li>
+
+                <i class="fas fa-check-circle"></i>
+
+                <span>
+
+                    <b>Single ID:</b>
+
+                    Ek mobile par unlimited account allow hai.
+
+                </span>
+
+            </li>
+
+            <li>
+
+                <i class="fas fa-check-circle"></i>
+
+                <span>
+
+                    <b>Withdrawal:</b>
+
+                    Minimum withdrawal ₹140 hai
+                    (24 Hours).
+
+                </span>
+
+            </li>
+
+            <li>
+
+                <i class="fas fa-check-circle"></i>
+
+                <span>
+
+                    <b>Payment:</b>
+
+                    Hamesha official QR code se hi payment karein.
+
+                </span>
+
+            </li>
+
+            <li>
+
+                <i class="fas fa-check-circle"></i>
+
+                <span>
+
+                    <b>Verification:</b>
+
+                    UTR number sahi bharna zaroori hai.
+
+                </span>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- Footer -->
+
+    <div class="footer">
+
+        © 2026 Future Earn Digital
+        | All Rights Reserved
+
+    </div>
+
+</div>
+
+</body>
+</html>
