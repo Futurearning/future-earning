@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Premium Profile | Future Earn</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    background:
+        radial-gradient(circle at top,#16213e 0%,#0f172a 40%,#020617 100%);
+
+    color:#fff;
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    position:relative;
+}
+
+/* Animated Background */
+
+body::before,
+body::after{
+
+    content:'';
+
+    position:fixed;
+
+    width:350px;
+    height:350px;
+
+    border-radius:50%;
+
+    filter:blur(90px);
+
+    opacity:.22;
+
+    z-index:-1;
+
+    animation:floatGlow 8s ease-in-out infinite alternate;
+}
+
+body::before{
+    background:#00d4ff;
+    top:-100px;
+    left:-100px;
+}
+
+body::after{
+    background:#ffde59;
+    bottom:-120px;
+    right:-100px;
+    animation-delay:2s;
+}
+
+@keyframes floatGlow{
+
+    from{
+        transform:translateY(0px) scale(1);
+    }
+
+    to{
+        transform:translateY(40px) scale(1.1);
+    }
+
+}
+
+/* Sidebar */
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+    left:-290px;
+
+    width:280px;
+    height:100%;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.08),
+            rgba(255,255,255,.03)
+        );
+
+    backdrop-filter:blur(20px);
+
+    border-right:1px solid rgba(255,255,255,.08);
+
+    transition:.4s ease;
+
+    z-index:1000;
+
+    padding-top:20px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.nav-link{
+
+    padding:15px 20px;
+
+    color:#d1d5db;
+
+    text-decoration:none;
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    border-radius:14px;
+
+    margin:8px 12px;
+
+    transition:.3s ease;
+}
+
+.nav-link:hover{
+
+    background:rgba(255,255,255,.08);
+
+    color:#ffde59;
+
+    transform:translateX(6px);
+}
+
+/* Menu */
+
+.menu-btn{
+
+    position:fixed;
+
+    top:20px;
+    left:20px;
+
+    width:48px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+        );
+
+    backdrop-filter:blur(12px);
+
+    color:#ffde59;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    z-index:900;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+
+    transition:.3s ease;
+}
+
+.menu-btn:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.05);
+
+}
+
+.overlay{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,.65);
+
+    display:none;
+
+    z-index:999;
+}
+
+.overlay.active{
+    display:block;
+}
+
+/* Main */
+
+.container{
+
+    max-width:650px;
+
+    margin:90px auto 30px;
+
+    padding:20px;
+}
+
+/* Profile Card */
+
+.profile-card{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+        );
+
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    padding:35px;
+
+    border-radius:30px;
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.35),
+        inset 0 1px 1px rgba(255,255,255,.08);
+
+    animation:cardFloat 5s ease-in-out infinite;
+}
+
+@keyframes cardFloat{
+
+    0%,100%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-6px);
+    }
+
+}
+
+/* Premium 3D Profile */
+
+.profile-img{
+
+    position:relative;
+
+    width:120px;
+    height:120px;
+
+    margin:0 auto 20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transform-style:preserve-3d;
+
+    animation:profileFloat 5s ease-in-out infinite;
+}
+
+@keyframes profileFloat{
+
+    0%,100%{
+        transform:
+            translateY(0px)
+            rotateY(0deg);
+    }
+
+    50%{
+        transform:
+            translateY(-8px)
+            rotateY(8deg);
+    }
+
+}
+
+/* Rings */
+
+.profile-ring{
+
+    position:absolute;
+
+    width:120px;
+    height:120px;
+
+    border-radius:50%;
+
+    border:2px solid rgba(0,212,255,.5);
+
+    animation:rotateRing 8s linear infinite;
+
+    box-shadow:
+        0 0 25px rgba(0,212,255,.35);
+}
+
+.profile-ring.ring2{
+
+    width:145px;
+    height:145px;
+
+    border:2px dashed rgba(255,222,89,.45);
+
+    animation-direction:reverse;
+
+    animation-duration:12s;
+
+    box-shadow:
+        0 0 30px rgba(255,222,89,.25);
+}
+
+@keyframes rotateRing{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+/* Inner Circle */
+
+.profile-inner{
+
+    position:relative;
+
+    z-index:5;
+
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.16),
+            rgba(255,255,255,.05)
+        );
+
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.35),
+        inset 0 1px 1px rgba(255,255,255,.1);
+
+    transition:.4s ease;
+}
+
+.profile-inner:hover{
+
+    transform:
+        perspective(1000px)
+        rotateX(10deg)
+        rotateY(-10deg)
+        scale(1.06);
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.4),
+        0 0 25px rgba(0,212,255,.3);
+}
+
+.profile-inner i{
+
+    font-size:2.3rem;
+
+    color:#ffde59;
+
+    text-shadow:
+        0 0 20px rgba(255,222,89,.5);
+}
+
+/* Text */
+
+#dispName{
+    font-size:1.6rem;
+    margin-bottom:8px;
+}
+
+#dispEmail{
+    color:#94a3b8;
+    font-size:.9rem;
+    margin-bottom:25px;
+}
+
+/* Info */
+
+.info-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:14px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+    font-size:.92rem;
+}
+
+.info-label{
+    color:#94a3b8;
+}
+
+.info-value{
+    color:#fff;
+    font-weight:600;
+}
+
+/* Password */
+
+.password-section{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04)
+        );
+
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    padding:28px;
+
+    border-radius:30px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+
+.password-section h3{
+
+    color:#ffde59;
+
+    margin-bottom:18px;
+
+    font-size:1.15rem;
+}
+
+input{
+
+    width:100%;
+
+    padding:14px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:14px;
+
+    color:#fff;
+
+    margin-bottom:16px;
+
+    outline:none;
+
+    transition:.3s ease;
+
+    backdrop-filter:blur(10px);
+}
+
+input:focus{
+
+    border-color:#00d4ff;
+
+    box-shadow:
+        0 0 15px rgba(0,212,255,.25);
+}
+
+.update-btn{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffde59,
+            #f59e0b
+        );
+
+    color:#000;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s ease;
+
+    box-shadow:
+        0 12px 25px rgba(255,222,89,.25);
+}
+
+.update-btn:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.02);
+
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+
+    .container{
+        padding:15px;
+    }
+
+    .profile-card,
+    .password-section{
+        padding:24px;
+    }
+
+    .info-row{
+        font-size:.85rem;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="menu-btn" id="openMenu">
+    <i class="fas fa-bars"></i>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- Sidebar -->
+
+<div class="sidebar" id="sidebar">
+
+    <h2
+        style="
+            color:#ffde59;
+            text-align:center;
+            margin-bottom:20px;
+        "
+    >
+        FUTURE EARN
+    </h2>
+
+    <a href="dashboard.html" class="nav-link">
+        <i class="fas fa-home"></i>
+        Dashboard
+    </a>
+
+    <a href="profile.html"
+    class="nav-link"
+    style="color:#ffde59;">
+        <i class="fas fa-user"></i>
+        My Profile
+    </a>
+
+    <a href="tree.html" class="nav-link">
+        <i class="fas fa-sitemap"></i>
+        Team Tree
+    </a>
+
+    <a href="#" class="nav-link" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+    </a>
+
+</div>
+
+<!-- Main -->
+
+<div class="container">
+
+    <!-- Profile Card -->
+
+    <div class="profile-card">
+
+        <div class="profile-img">
+
+            <div class="profile-ring"></div>
+
+            <div class="profile-ring ring2"></div>
+
+            <div class="profile-inner">
+                <i class="fas fa-user"></i>
+            </div>
+
+        </div>
+
+        <h2 id="dispName">Loading...</h2>
+
+        <p id="dispEmail">---</p>
+
+        <div class="info-row">
+            <span class="info-label">User ID:</span>
+            <span class="info-value" id="dispID">--</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Sponsor:</span>
+            <span class="info-value" id="dispSponsor">--</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Position:</span>
+            <span class="info-value" id="dispPos">--</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Status:</span>
+            <span
+                class="info-value"
+                id="dispStatus"
+                style="color:#ffde59;"
+            >
+                --
+            </span>
+        </div>
+
+    </div>
+
+    <!-- Password -->
+
+    <div class="password-section">
+
+        <h3>Update Password</h3>
+
+        <input
+            type="password"
+            id="newPass"
+            placeholder="Enter New Password"
+        >
+
+        <input
+            type="password"
+            id="confirmPass"
+            placeholder="Confirm New Password"
+        >
+
+        <button
+            class="update-btn"
+            id="updatePassBtn"
+        >
+            Update Password
+        </button>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+import {
+    initializeApp
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+
+import {
+    getAuth,
+    onAuthStateChanged,
+    updatePassword,
+    signOut
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+/* Firebase */
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+
+    authDomain: "future-earn-20129.firebaseapp.com",
+
+    projectId: "future-earn-20129",
+
+    storageBucket: "future-earn-20129.firebasestorage.app",
+
+    messagingSenderId: "64268879881",
+
+    appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+/* Sidebar */
+
+const sidebar = document.getElementById('sidebar');
+
+const overlay = document.getElementById('overlay');
+
+document.getElementById('openMenu').onclick = () => {
+
+    sidebar.classList.add('active');
+
+    overlay.classList.add('active');
+};
+
+overlay.onclick = () => {
+
+    sidebar.classList.remove('active');
+
+    overlay.classList.remove('active');
+};
+
+/* User Data */
+
+onAuthStateChanged(auth, (user) => {
+
+    if(user){
+
+        onSnapshot(doc(db, "users", user.uid), (snap) => {
+
+            const d = snap.data();
+
+            document.getElementById('dispName').innerText =
+                d.fullName;
+
+            document.getElementById('dispEmail').innerText =
+                d.email;
+
+            document.getElementById('dispID').innerText =
+                d.referralCode;
+
+            document.getElementById('dispSponsor').innerText =
+                d.referBy;
+
+            document.getElementById('dispPos').innerText =
+                d.position.toUpperCase();
+
+            document.getElementById('dispStatus').innerText =
+                d.status.toUpperCase();
+
+        });
+
+    }else{
+
+        window.location.href = "index.html";
+
+    }
+
+});
+
+/* Password Update */
+
+document.getElementById('updatePassBtn').onclick = async () => {
+
+    const newP =
+        document.getElementById('newPass').value;
+
+    const confP =
+        document.getElementById('confirmPass').value;
+
+    if(newP.length < 6){
+
+        alert(
+            "Password kam se kam 6 characters ka hona chahiye!"
+        );
+
+        return;
+    }
+
+    if(newP !== confP){
+
+        alert("Password match nahi ho rahe!");
+
+        return;
+    }
+
+    try{
+
+        await updatePassword(auth.currentUser, newP);
+
+        alert("Success! Password update ho gaya hai.");
+
+        document.getElementById('newPass').value = "";
+
+        document.getElementById('confirmPass').value = "";
+
+    }catch(e){
+
+        alert(
+            "Error: Suraksha ke liye aapko dubara login karna pad sakta hai."
+        );
+
+        console.error(e);
+    }
+
+};
+
+/* Logout */
+
+document.getElementById('logoutBtn').onclick = () =>
+    signOut(auth);
+
+</script>
+
+</body>
+</html>
