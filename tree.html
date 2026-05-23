@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Premium Network Tree | Future Earn</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:
+        radial-gradient(circle at top,#16213e 0%,#0f172a 35%,#020617 100%);
+    color:#fff;
+    overflow-x:auto;
+    min-height:100vh;
+    padding:20px;
+    position:relative;
+}
+
+/* Animated Background */
+
+body::before,
+body::after{
+    content:'';
+    position:fixed;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(90px);
+    z-index:-1;
+    opacity:.25;
+    animation:floatGlow 8s ease-in-out infinite alternate;
+}
+
+body::before{
+    background:#00d4ff;
+    top:-100px;
+    left:-100px;
+}
+
+body::after{
+    background:#ffde59;
+    bottom:-120px;
+    right:-100px;
+    animation-delay:2s;
+}
+
+@keyframes floatGlow{
+    from{
+        transform:translateY(0px) scale(1);
+    }
+    to{
+        transform:translateY(40px) scale(1.1);
+    }
+}
+
+/* Header */
+
+.header-info{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    padding:18px;
+    background:rgba(10,15,30,.75);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    box-shadow:0 10px 40px rgba(0,0,0,.45);
+}
+
+.header-info h2{
+    font-size:1.2rem;
+    font-weight:700;
+    letter-spacing:1px;
+    color:#fff;
+    text-shadow:0 0 20px rgba(255,255,255,.25);
+}
+
+.back-btn{
+    position:absolute;
+    left:18px;
+    text-decoration:none;
+    color:#fff;
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.1);
+    transition:.3s ease;
+    font-size:1.2rem;
+}
+
+.back-btn:hover{
+    transform:translateY(-3px) scale(1.05);
+    background:rgba(255,255,255,.16);
+    box-shadow:0 10px 20px rgba(0,0,0,.25);
+}
+
+/* Main Container */
+
+.tree-container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    padding-top:110px;
+    animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Premium Node */
+
+.node{
+    width:140px;
+    padding:14px;
+    border-radius:22px;
+    text-align:center;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+
+    background:linear-gradient(
+        145deg,
+        rgba(255,255,255,.12),
+        rgba(255,255,255,.04)
+    );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.35),
+        inset 0 1px 1px rgba(255,255,255,.08);
+
+    transform-style:preserve-3d;
+
+    transition:all .45s cubic-bezier(.175,.885,.32,1.275);
+
+    animation:cardFloat 4s ease-in-out infinite;
+}
+
+.node::before{
+    content:'';
+    position:absolute;
+    top:-100%;
+    left:-100%;
+    width:250%;
+    height:250%;
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.12),
+        transparent
+    );
+    transform:rotate(25deg);
+    transition:.8s;
+}
+
+.node:hover::before{
+    top:-20%;
+    left:-20%;
+}
+
+.node:hover{
+    transform:
+        perspective(1000px)
+        rotateX(8deg)
+        rotateY(-8deg)
+        translateY(-10px)
+        scale(1.06);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.45),
+        0 0 30px rgba(0,212,255,.18);
+
+    filter:brightness(1.08);
+}
+
+@keyframes cardFloat{
+    0%,100%{
+        transform:translateY(0px);
+    }
+    50%{
+        transform:translateY(-4px);
+    }
+}
+
+/* Active Pending */
+
+.node.active{
+    border:1px solid rgba(0,255,136,.45);
+    box-shadow:
+        0 0 25px rgba(0,255,136,.22),
+        inset 0 0 12px rgba(0,255,136,.12);
+}
+
+.node.pending{
+    border:1px solid rgba(255,68,68,.45);
+    box-shadow:
+        0 0 25px rgba(255,68,68,.18),
+        inset 0 0 12px rgba(255,68,68,.08);
+}
+
+.node h4{
+    font-size:.9rem;
+    margin-bottom:8px;
+    color:#fff;
+    font-weight:600;
+}
+
+.status-tag{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:5px 12px;
+    border-radius:50px;
+    font-size:.62rem;
+    font-weight:700;
+    margin-top:8px;
+    letter-spacing:.6px;
+    backdrop-filter:blur(10px);
+}
+
+.active .status-tag{
+    color:#00ff88;
+    background:rgba(0,255,136,.12);
+    border:1px solid rgba(0,255,136,.22);
+}
+
+.pending .status-tag{
+    color:#ff5f5f;
+    background:rgba(255,95,95,.12);
+    border:1px solid rgba(255,95,95,.2);
+}
+
+/* Layout */
+
+.children{
+    display:flex;
+    justify-content:center;
+    width:100%;
+    margin-top:45px;
+    position:relative;
+}
+
+.children::before{
+    content:'';
+    position:absolute;
+    top:-40px;
+    left:50%;
+    width:3px;
+    height:40px;
+    border-radius:20px;
+    background:linear-gradient(to bottom,#00d4ff,#ffde59);
+    box-shadow:0 0 15px rgba(0,212,255,.4);
+}
+
+.node-wrapper{
+    padding:0 10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    position:relative;
+    flex:1;
+}
+
+.node-wrapper::after{
+    content:'';
+    position:absolute;
+    top:-20px;
+    width:100%;
+    height:2px;
+    background:linear-gradient(to right,#00d4ff,#ffde59);
+    opacity:.45;
+}
+
+.node-wrapper:only-child::after{
+    display:none;
+}
+
+/* Stats Card */
+
+.stats-card{
+    width:100%;
+    max-width:500px;
+    margin-bottom:25px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:24px;
+
+    backdrop-filter:blur(20px);
+
+    padding:18px;
+
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+}
+
+.stats-box h4{
+    font-size:.8rem;
+    margin-bottom:10px;
+}
+
+.stats-box p{
+    font-size:.72rem;
+    line-height:1.5;
+    color:#b8c1d1;
+}
+
+/* Section */
+
+.side-box{
+    flex:1;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:20px;
+    padding:16px;
+    backdrop-filter:blur(15px);
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.side-box h3{
+    font-size:.85rem;
+    margin-bottom:15px;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+    height:8px;
+    width:8px;
+}
+
+::-webkit-scrollbar-track{
+    background:#0f172a;
+}
+
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(#00d4ff,#ffde59);
+    border-radius:20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .node{
+        width:125px;
+        padding:12px;
+    }
+
+    .stats-card{
+        flex-direction:column;
+    }
+
+    .header-info h2{
+        font-size:1rem;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header-info">
+    <a href="dashboard.html" class="back-btn">←</a>
+    <h2>Network Explorer</h2>
+</div>
+
+<div class="tree-container" id="treeView">
+    <p>Loading your network...</p>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+import {
+    getAuth,
+    onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+/* Firebase Config */
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+
+    authDomain: "future-earn-20129.firebaseapp.com",
+
+    projectId: "future-earn-20129",
+
+    storageBucket: "future-earn-20129.firebasestorage.app",
+
+    messagingSenderId: "64268879881",
+
+    appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+/* Auth */
+
+onAuthStateChanged(auth, (user) => {
+
+    if(user){
+        showDirectMembers(user.uid);
+    }else{
+        window.location.href = "index.html";
+    }
+
+});
+
+/* Main Function */
+
+async function showDirectMembers(uid){
+
+    const treeContainer = document.getElementById('treeView');
+
+    treeContainer.innerHTML =
+        "<p style='color:#ffde59;'>Loading Network...</p>";
+
+    const userSnap = await getDoc(doc(db, "users", uid));
+
+    if(!userSnap.exists()) return;
+
+    const myData = userSnap.data();
+
+    const q = query(
+        collection(db, "users"),
+        where("referBy", "==", myData.referralCode)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    let leftList = "";
+    let rightList = "";
+
+    let activeNames = [];
+    let inactiveNames = [];
+
+    querySnapshot.forEach((member) => {
+
+        const mData = member.data();
+
+        const status =
+            (mData.idStatus || mData.status || "pending").toLowerCase();
+
+        const name = mData.fullName || "User";
+
+        const statusColor =
+            status === "active" ? "#00ff88" : "#ff4444";
+
+        if(status === "active"){
+            activeNames.push(name);
+        }else{
+            inactiveNames.push(name);
+        }
+
+        const memberHTML = `
+
+            <div
+                class="node ${status}"
+                onclick="window.showDirectMembers('${member.id}')"
+                style="margin-bottom:12px;"
+            >
+
+                <h4>${name}</h4>
+
+                <div
+                    class="status-tag"
+                    style="
+                        color:${statusColor};
+                        border:1px solid ${statusColor}44;
+                    "
+                >
+                    ${status.toUpperCase()}
+                </div>
+
+            </div>
+
+        `;
+
+        if(mData.position === "left"){
+            leftList += memberHTML;
+        }else{
+            rightList += memberHTML;
+        }
+
+    });
+
+    treeContainer.innerHTML = `
+
+        <div style="margin-bottom:20px; text-align:center;">
+
+            <h2
+                style="
+                    color:#fff;
+                    font-size:1.5rem;
+                    margin-bottom:12px;
+                "
+            >
+                ${myData.fullName}
+            </h2>
+
+            <button
+                onclick="location.reload()"
+                style="
+                    background:rgba(255,255,255,.06);
+                    color:#fff;
+                    border:1px solid rgba(255,255,255,.08);
+                    padding:10px 18px;
+                    border-radius:14px;
+                    cursor:pointer;
+                    backdrop-filter:blur(10px);
+                "
+            >
+                ← Back to My Home
+            </button>
+
+        </div>
+
+        <div class="stats-card">
+
+            <div class="stats-box">
+
+                <h4 style="color:#00ff88;">
+                    ACTIVE (${activeNames.length})
+                </h4>
+
+                <p>
+                    ${activeNames.join(", ") || "None"}
+                </p>
+
+            </div>
+
+            <div
+                style="
+                    width:1px;
+                    background:rgba(255,255,255,.08);
+                "
+            ></div>
+
+            <div class="stats-box">
+
+                <h4 style="color:#ff5f5f;">
+                    INACTIVE (${inactiveNames.length})
+                </h4>
+
+                <p>
+                    ${inactiveNames.join(", ") || "None"}
+                </p>
+
+            </div>
+
+        </div>
+
+        <div
+            style="
+                display:flex;
+                gap:18px;
+                width:100%;
+            "
+        >
+
+            <div class="side-box">
+
+                <h3 style="color:#00d4ff;">
+                    LEFT SIDE
+                </h3>
+
+                ${leftList || `
+                    <p style='color:#4b5563;font-size:12px;'>
+                        Empty
+                    </p>
+                `}
+
+            </div>
+
+            <div class="side-box">
+
+                <h3 style="color:#ffde59;">
+                    RIGHT SIDE
+                </h3>
+
+                ${rightList || `
+                    <p style='color:#4b5563;font-size:12px;'>
+                        Empty
+                    </p>
+                `}
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+window.showDirectMembers = showDirectMembers;
+
+</script>
+
+</body>
+</html>
