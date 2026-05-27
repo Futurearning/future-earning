@@ -517,6 +517,113 @@ style="margin-top:10px;color:#ffde59;font-size:12px;">
 </p>
 
 </div>
+  <div id="offerTimer" style="
+margin-top:20px;
+padding:22px;
+border-radius:28px;
+background:
+linear-gradient(145deg,#1a1300,#0a0a0a);
+
+border:2px solid #ffde59;
+
+text-align:center;
+
+box-shadow:
+0 0 25px rgba(255,222,89,0.25),
+inset 0 0 20px rgba(255,255,255,0.03);
+
+position:relative;
+
+overflow:hidden;
+">
+
+<div style="
+position:absolute;
+width:180px;
+height:180px;
+background:
+radial-gradient(circle,
+rgba(255,222,89,0.25),
+transparent);
+
+top:-60px;
+right:-60px;
+">
+
+</div>
+
+<h2 style="
+font-size:24px;
+font-weight:800;
+color:#ffde59;
+
+text-shadow:
+0 0 15px rgba(255,222,89,0.5);
+
+margin-bottom:10px;
+">
+
+🔥 EID SPECIAL OFFER 🔥
+
+</h2>
+
+<p style="
+font-size:15px;
+color:#bbb;
+margin-bottom:18px;
+">
+
+⏰ Offer Valid For Limited Time
+
+</p>
+
+<div id="countdown"
+style="
+display:inline-block;
+
+padding:18px 30px;
+
+border-radius:22px;
+
+background:
+linear-gradient(145deg,#061b15,#0a2a20);
+
+border:2px solid #00ff99;
+
+font-size:34px;
+
+font-weight:800;
+
+letter-spacing:2px;
+
+color:#00ff99;
+
+box-shadow:
+0 0 25px rgba(0,255,153,0.35),
+inset 0 0 18px rgba(255,255,255,0.05);
+
+transform:
+perspective(500px)
+rotateX(8deg);
+
+">
+
+48:00:00
+
+</div>
+
+<p style="
+margin-top:18px;
+font-size:14px;
+color:#ffde59;
+font-weight:600;
+">
+
+🚀 Hurry Up Before Time Ends
+
+</p>
+
+  </div>
 
 <div class="card-grid">
 
@@ -968,6 +1075,43 @@ document.getElementById(
 signOut(auth);
 
 };
+
+ /* 3D OFFER TIMER */
+
+let offerTime = 48 * 60 * 60;
+
+function updateOfferTimer(){
+
+let hours =
+Math.floor(offerTime / 3600);
+
+let minutes =
+Math.floor((offerTime % 3600) / 60);
+
+let seconds =
+offerTime % 60;
+
+document.getElementById(
+"countdown"
+).innerText =
+
+`${hours.toString().padStart(2,'0')}:${
+minutes.toString().padStart(2,'0')}:${
+seconds.toString().padStart(2,'0')}`;
+
+if(offerTime > 0){
+
+offerTime--;
+
+}
+
+}
+
+setInterval(updateOfferTimer,1000);
+
+updateOfferTimer(); 
+
+  
 
 </script>
 </body>
