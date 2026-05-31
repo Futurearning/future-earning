@@ -478,6 +478,31 @@ transform:translateX(0);
 transform:translateX(-100%);
 }
 }
+.join-ticker{
+margin-bottom:15px;
+background:linear-gradient(135deg,#00c6ff,#0072ff);
+color:#fff;
+padding:12px;
+border-radius:15px;
+font-weight:700;
+overflow:hidden;
+white-space:nowrap;
+}
+
+.join-ticker span{
+display:inline-block;
+padding-left:100%;
+animation:tickerMove 18s linear infinite;
+}
+
+@keyframes tickerMove{
+0%{
+transform:translateX(0);
+}
+100%{
+transform:translateX(-100%);
+}
+}
 
 </style>
 </head>
@@ -518,6 +543,11 @@ style="color:#ffde59;">
 </div>
 
 <div class="container">
+  <div class="join-ticker">
+  <span id="joinTicker">
+    🎉 Loading latest joins...
+  </span>
+  </div>
 
 <div class="bonus-card">
 
@@ -686,7 +716,11 @@ getFirestore,
 doc,
 onSnapshot,
 updateDoc,
-increment
+increment,
+collection,
+query,
+orderBy,
+limit
 }
 from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
@@ -921,6 +955,31 @@ window.location.href =
 "index.html";
 
 }
+
+});
+  /* LIVE JOIN TICKER */
+
+const latestQuery = query(
+collection(db,"users"),
+orderBy("createdAt","desc"),
+limit(5)
+);
+
+onSnapshot(latestQuery,(snap)=>{
+
+let text = "";
+
+snap.forEach((doc)=>{
+
+const u = doc.data();
+
+text += `🎉 ${u.fullName} joined ₹${u.plan} Plan • `;
+
+});
+
+document.getElementById(
+"joinTicker"
+).innerText = text;
 
 });
 
