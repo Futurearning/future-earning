@@ -504,6 +504,94 @@ transform:translateX(-100%);
 }
 }
 
+
+
+
+
+
+
+
+
+
+  .offer-popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.8);
+backdrop-filter:blur(6px);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999999;
+}
+
+.offer-box{
+width:95%;
+max-width:340px;
+background:#111;
+border:2px solid #ffde59;
+border-radius:25px;
+padding:20px;
+text-align:center;
+position:relative;
+animation:popupAnim .4s ease;
+}
+
+.offer-img{
+width:100%;
+border-radius:18px;
+margin-bottom:15px;
+}
+
+.offer-box h3{
+color:#ffde59;
+font-size:24px;
+margin-bottom:10px;
+}
+
+.offer-box p{
+color:#fff;
+font-size:14px;
+line-height:22px;
+margin-bottom:15px;
+}
+
+.offer-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:15px;
+background:linear-gradient(145deg,#ffde59,#ffd000);
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+}
+
+.close-offer{
+position:absolute;
+top:10px;
+right:12px;
+background:none;
+border:none;
+color:white;
+font-size:20px;
+cursor:pointer;
+}
+
+@keyframes popupAnim{
+0%{
+transform:scale(.6);
+opacity:0;
+}
+
+100%{
+transform:scale(1);
+opacity:1;
+}
+}
+
 </style>
 </head>
 <body>
@@ -681,6 +769,12 @@ Your Referral Code
 onclick="window.location.href='buy.html'">
 🛒 BUY PLAN
 </button>
+
+  
+  <button class="menu-btn"
+onclick="window.location.href='secret_code.html'">
+🧑‍💻 Secret Code
+  </button>
   
 <button class="menu-btn"
 onclick="window.location.href='profile.html'">
@@ -730,6 +824,11 @@ class="logout-btn">
 </div>
 
 <script type="module">
+  window.closeOffer = function(){
+
+document.getElementById("offerPopup").style.display="none";
+
+  }
 
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
@@ -1094,5 +1193,32 @@ signOut(auth);
   
 
 </script>
+
+  <!-- OFFER POPUP -->
+
+<div id="offerPopup" class="offer-popup">
+
+<div class="offer-box">
+
+<button class="close-offer" onclick="closeOffer()">
+✖
+</button>
+
+<img src="offer.jpg" class="offer-img">
+
+<h3>🎁 Special Offer</h3>
+
+<p>
+Jo User Apne Direct Me 2 ID Activate Karega,
+Usko 1 Week Tak ₹10 Voucher Milega.
+</p>
+
+<button class="offer-btn" onclick="closeOffer()">
+Abhi Aaye
+</button>
+
+</div>
+
+</div>
 </body>
 </html>
