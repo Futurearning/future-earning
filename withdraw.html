@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Withdraw | Future Earn</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+body { background: radial-gradient(circle at top,#16213e 0%,#0f172a 40%,#020617 100%); color:#fff; min-height:100vh; padding:20px; overflow-x:hidden; position:relative; }
+body::before, body::after { content:''; position:fixed; width:350px; height:350px; border-radius:50%; filter:blur(90px); opacity:.22; z-index:-1; animation:floatGlow 8s ease-in-out infinite alternate; }
+body::before { background:#00d4ff; top:-120px; left:-100px; }
+body::after { background:#ffde59; bottom:-120px; right:-100px; animation-delay:2s; }
+@keyframes floatGlow { from { transform:translateY(0px) scale(1); } to { transform:translateY(40px) scale(1.1); } }
+.container { max-width:450px; margin:auto; }
+.wallet-card { background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.08); padding:35px; border-radius:30px; text-align:center; margin-bottom:25px; box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 1px 1px rgba(255,255,255,.08); animation:cardFloat 5s ease-in-out infinite; }
+@keyframes cardFloat { 0%,100% { transform:translateY(0px); } 50% { transform:translateY(-6px); } }
+.wallet-card h3 { color:#94a3b8; font-size:.9rem; margin-bottom:10px; }
+.wallet-card p { font-size:2.4rem; font-weight:700; color:#ffde59; text-shadow: 0 0 20px rgba(255,222,89,.35); }
+input { width:100%; padding:15px; border-radius:18px; border:1px solid rgba(255,255,255,.08); background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); backdrop-filter:blur(10px); color:#fff; outline:none; margin-bottom:18px; transition:.3s ease; }
+input:focus { border-color:#00d4ff; box-shadow: 0 0 20px rgba(0,212,255,.25); }
+.calculation-box { background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.08); backdrop-filter:blur(15px); padding:20px; border-radius:24px; margin-bottom:20px; box-shadow:0 15px 35px rgba(0,0,0,.25); }
+.calc-row { display:flex; justify-content:space-between; margin-bottom:10px; color:#cbd5e1; font-size:.92rem; }
+.final-amt { border-top:1px solid rgba(255,255,255,.08); padding-top:15px; margin-top:10px; color:#ffde59; font-weight:700; font-size:1rem; }
+.btn-withdraw { width:100%; padding:15px; border:none; border-radius:20px; background: linear-gradient(135deg, #ffde59, #f59e0b); color:#000; font-size:1rem; font-weight:700; cursor:pointer; transition:.3s ease; box-shadow: 0 15px 35px rgba(255,222,89,.25); }
+.btn-withdraw:hover { transform: translateY(-4px) scale(1.03); }
+.popup { position:fixed; top:50%; left:50%; transform: translate(-50%,-50%) scale(.8); width:90%; max-width:350px; background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); backdrop-filter:blur(25px); border:1px solid rgba(255,255,255,.08); border-radius:28px; padding:30px; text-align:center; z-index:9999; opacity:0; visibility:hidden; transition:.35s ease; box-shadow: 0 25px 60px rgba(0,0,0,.45); }
+.popup.active { opacity:1; visibility:visible; transform: translate(-50%,-50%) scale(1); }
+.popup-icon { width:80px; height:80px; margin:auto auto 20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; background: linear-gradient(135deg, #00ff88, #00d4ff); color:#000; box-shadow: 0 0 30px rgba(0,255,136,.35); animation:pulse 2s infinite; }
+@keyframes pulse { 0% { transform:scale(1); } 50% { transform:scale(1.08); } 100% { transform:scale(1); } }
+.popup h2 { margin-bottom:12px; color:#fff; }
+.popup p { color:#cbd5e1; line-height:1.7; font-size:.92rem; }
+.close-btn { margin-top:22px; padding:12px 22px; border:none; border-radius:16px; background: linear-gradient(135deg, #00d4ff, #2563eb); color:#fff; font-weight:600; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="wallet-card">
+        <h3>Current Balance</h3>
+        <p>₹<span id="currentBalance">0</span></p>
+    </div>
+
+    <input type="number" step="0.01" id="withdrawAmount" placeholder="Enter Amount">
+
+    <div class="calculation-box">
+        <div class="calc-row">
+            <span>TDS (5%)</span>
+            <span id="tdsAmt">₹0</span>
+        </div>
+        <div class="calc-row">
+            <span>Admin Charge (5%)</span>
+            <span id="adminAmt">₹0</span>
+        </div>
+        <div class="calc-row final-amt">
+            <span>Net Payable</span>
+            <span id="netAmt">₹0</span>
+        </div>
+    </div>
+
+    <input type="text" id="upiId" placeholder="Enter UPI ID">
+    <button class="btn-withdraw" id="requestBtn">Request Withdrawal</button>
+</div>
+
+<div class="popup" id="successPopup">
+    <div class="popup-icon">✓</div>
+    <h2>Withdrawal Requested</h2>
+    <p>Your withdrawal request has been submitted successfully.<br><br><b>10% deduction</b> has been applied successfully.<br><br>Your payment will be credited within <b>1 hour</b> in your account.</p>
+    <button class="close-btn" id="closePopup">OK</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, addDoc, collection, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+    authDomain: "future-earn-20129.firebaseapp.com",
+    projectId: "future-earn-20129",
+    storageBucket: "future-earn-20129.firebasestorage.app",
+    messagingSenderId: "64268879881",
+    appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let userBalance = 0;
+let userPlan = "199";
+const amountInput = document.getElementById('withdrawAmount');
+
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        onSnapshot(doc(db, "users", user.uid), (snap) => {
+            const data = snap.data();
+            userBalance = parseFloat(data.wallet) || 0;
+            userPlan = data.plan || "199";
+
+            document.getElementById('currentBalance').innerText = userBalance.toFixed(2);
+            document.getElementById('withdrawAmount').placeholder = userPlan == "100" ? "Enter Amount (Min ₹90)" : "Enter Amount (Min ₹140)";
+        });
+    }
+});
+
+/* Live Calculation - Float Friendly */
+amountInput.oninput = () => {
+    const val = parseFloat(amountInput.value) || 0;
+    const tds = val * 0.05;
+    const admin = val * 0.05;
+    const net = val - (tds + admin);
+
+    document.getElementById('tdsAmt').innerText = "₹" + tds.toFixed(2);
+    document.getElementById('adminAmt').innerText = "₹" + admin.toFixed(2);
+    document.getElementById('netAmt').innerText = "₹" + (net > 0 ? net.toFixed(2) : "0.00");
+};
+
+/* Withdrawal Execution */
+document.getElementById('requestBtn').onclick = async () => {
+    const amt = parseFloat(amountInput.value) || 0;
+    const upi = document.getElementById('upiId').value;
+    const netPayable = amt - (amt * 0.10);
+    const minWithdraw = userPlan == "100" ? 90 : 140;
+
+    if(amt < minWithdraw){
+        alert("Min withdrawal ₹" + minWithdraw + " hai!");
+        return;
+    }
+    if(amt > userBalance){
+        alert("Balance kam hai!");
+        return;
+    }
+    if(!upi.includes('@')){
+        alert("UPI ID sahi daalein!");
+        return;
+    }
+
+    try{
+        // Absolute Float subtraction structure
+        await updateDoc(doc(db, "users", auth.currentUser.uid), {
+            wallet: increment(-amt)
+        });
+
+        await addDoc(collection(db, "withdrawals"), {
+            userId: auth.currentUser.uid,
+            userName: auth.currentUser.email,
+            grossAmount: amt, // Sends exact floating values now
+            netAmount: netPayable,
+            upiId: upi,
+            status: "pending",
+            timestamp: Date.now()
+        });
+
+        await addDoc(collection(db, "transactions"), {
+            userId: auth.currentUser.uid,
+            amount: amt,
+            type: "Withdrawal Request (successful)",
+            timestamp: Date.now(),
+            isDebit: true
+        });
+
+        document.getElementById('successPopup').classList.add('active');
+    }catch(e){
+        alert("Error!");
+    }
+};
+
+document.getElementById('closePopup').onclick = () => {
+    window.location.href = "dashboard.html";
+};
+</script>
+</body>
+</html>
