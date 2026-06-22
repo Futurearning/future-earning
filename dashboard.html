@@ -1,1229 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Future Earn Dashboard</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
-
-body{
-
-background:
-linear-gradient(135deg,#0f172a,#111827,#000);
-
-min-height:100vh;
-
-color:white;
-
-overflow-x:hidden;
-}
+*{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+body{ background: linear-gradient(135deg,#0f172a,#111827,#000); min-height:100vh; color:white; overflow-x:hidden; }
 
 /* HEADER */
+.header{ padding:30px 20px; text-align:center; background: rgba(255,255,255,0.03); backdrop-filter:blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.header h2{ font-size:30px; font-weight:700; margin-top:10px; color:#ffde59; }
+.header p{ font-size:14px; color:#aaa; margin-top:5px; }
 
-.header{
-
-padding:30px 20px;
-
-text-align:center;
-
-background:
-rgba(255,255,255,0.03);
-
-backdrop-filter:blur(10px);
-
-border-bottom:
-1px solid rgba(255,255,255,0.08);
-}
-
-.header h2{
-
-font-size:30px;
-
-font-weight:700;
-
-margin-top:10px;
-
-color:#ffde59;
-}
-
-.header p{
-
-font-size:14px;
-
-color:#aaa;
-
-margin-top:5px;
-}
-
-.status-badge{
-
-display:inline-block;
-
-padding:8px 18px;
-
-border-radius:30px;
-
-font-size:13px;
-
-font-weight:600;
-}
-
-.active{
-
-background:
-rgba(0,255,128,0.12);
-
-border:
-1px solid #00ff99;
-
-color:#00ff99;
-}
-
-.pending{
-
-background:
-rgba(255,0,0,0.1);
-
-border:
-1px solid #ff4d6d;
-
-color:#ff4d6d;
-}
+.status-badge{ display:inline-block; padding:8px 18px; border-radius:30px; font-size:13px; font-weight:600; text-transform: uppercase; }
+.active{ background: rgba(0,255,128,0.12); border: 1px solid #00ff99; color:#00ff99; }
+.pending{ background: rgba(255,0,0,0.1); border: 1px solid #ff4d6d; color:#ff4d6d; }
+.blocked_status { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; }
 
 /* CONTAINER */
-
-.container{
-
-padding:20px;
-
-max-width:520px;
-
-margin:auto;
-}
+.container{ padding:20px; max-width:520px; margin:auto; }
 
 /* BONUS CARD */
+.bonus-card{ background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius:25px; padding:25px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.bonus-card h3{ font-size:22px; color:#ffde59; }
+.bonus-card p{ font-size:13px; color:#aaa; margin-top:6px; }
 
-.bonus-card{
-
-background:
-rgba(255,255,255,0.05);
-
-border:
-1px solid rgba(255,255,255,0.08);
-
-border-radius:25px;
-
-padding:25px;
-
-text-align:center;
-
-box-shadow:
-0 10px 30px rgba(0,0,0,0.3);
-}
-
-.bonus-card h3{
-
-font-size:22px;
-
-color:#ffde59;
-}
-
-.bonus-card p{
-
-font-size:13px;
-
-color:#aaa;
-
-margin-top:6px;
-}
-
-.btn-bonus{
-
-width:100%;
-
-padding:14px;
-
-margin-top:18px;
-
-border:none;
-
-border-radius:18px;
-
-background:
-linear-gradient(145deg,#ffde59,#ffd000);
-
-color:#111;
-
-font-size:15px;
-
-font-weight:700;
-
-cursor:pointer;
-
-transition:0.3s;
-}
-
-.btn-bonus:disabled{
-
-opacity:0.5;
-
-cursor:not-allowed;
-}
+.btn-bonus{ width:100%; padding:14px; margin-top:18px; border:none; border-radius:18px; background: linear-gradient(145deg,#ffde59,#ffd000); color:#111; font-size:15px; font-weight:700; cursor:pointer; transition:0.3s; }
+.btn-bonus:disabled{ opacity:0.5; cursor:not-allowed; }
 
 /* GRID */
-
-.card-grid{
-
-display:grid;
-
-grid-template-columns:1fr 1fr;
-
-gap:15px;
-
-margin-top:20px;
-}
-
-.card{
-
-background:
-rgba(255,255,255,0.05);
-
-border:
-1px solid rgba(255,255,255,0.08);
-
-border-radius:22px;
-
-padding:22px;
-
-text-align:center;
-}
-
-.card h3{
-
-font-size:12px;
-
-color:#999;
-
-margin-bottom:8px;
-}
-
-.card p{
-
-font-size:24px;
-
-font-weight:700;
-
-color:#ffde59;
-}
+.card-grid{ display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px; }
+.card{ background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius:22px; padding:22px; text-align:center; }
+.card h3{ font-size:12px; color:#999; margin-bottom:8px; }
+.card p{ font-size:24px; font-weight:700; color:#ffde59; }
 
 /* REFERRAL */
+.referral-box{ margin-top:20px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.15); padding:20px; border-radius:22px; text-align:center; }
+.referral-box p{ font-size:13px; color:#aaa; }
 
-.referral-box{
-
-margin-top:20px;
-
-background:
-rgba(255,255,255,0.05);
-
-border:
-1px dashed rgba(255,255,255,0.15);
-
-padding:20px;
-
-border-radius:22px;
-
-text-align:center;
-}
-
-.referral-box p{
-
-font-size:13px;
-
-color:#aaa;
-}
-
-#copyBtn{
-
-margin-top:12px;
-
-padding:13px 18px;
-
-border:none;
-
-border-radius:16px;
-
-background:
-linear-gradient(145deg,#ffde59,#ffd000);
-
-color:#111;
-
-font-size:15px;
-
-font-weight:700;
-
-cursor:pointer;
-}
+#copyBtn{ margin-top:12px; padding:13px 18px; border:none; border-radius:16px; background: linear-gradient(145deg,#ffde59,#ffd000); color:#111; font-size:15px; font-weight:700; cursor:pointer; }
+#copyBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* BUTTONS */
+.menu-btn{ width:100%; padding:14px; margin-top:12px; border:none; border-radius:18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color:white; font-size:15px; font-weight:600; cursor:pointer; transition: 0.3s; }
+.menu-btn:disabled { opacity: 0.3; pointer-events: none; border-color: rgba(255,255,255,0.02); color: #666; }
 
-.menu-btn{
-
-width:100%;
-
-padding:14px;
-
-margin-top:12px;
-
-border:none;
-
-border-radius:18px;
-
-background:
-rgba(255,255,255,0.05);
-
-border:
-1px solid rgba(255,255,255,0.08);
-
-color:white;
-
-font-size:15px;
-
-font-weight:600;
-
-cursor:pointer;
-}
-
-.logout-btn{
-
-width:100%;
-
-padding:14px;
-
-margin-top:25px;
-
-border:none;
-
-border-radius:18px;
-
-background:
-rgba(255,0,0,0.1);
-
-border:
-1px solid #ff4d6d;
-
-color:#ff4d6d;
-
-font-size:15px;
-
-font-weight:700;
-
-cursor:pointer;
-}
+.logout-btn{ width:100%; padding:14px; margin-top:25px; border:none; border-radius:18px; background: rgba(255,0,0,0.1); border: 1px solid #ff4d6d; color:#ff4d6d; font-size:15px; font-weight:700; cursor:pointer; }
 
 /* POPUP */
-
-.custom-popup-overlay{
-
-position:fixed;
-
-top:0;
-left:0;
-
-width:100%;
-height:100%;
-
-display:flex;
-
-justify-content:center;
-align-items:center;
-
-background:
-rgba(0,0,0,0.7);
-
-backdrop-filter:blur(6px);
-
-z-index:99999;
-
-padding:15px;
-}
-
-.custom-popup{
-
-width:100%;
-max-width:320px;
-
-padding:30px 22px;
-
-border-radius:28px;
-
-background:
-linear-gradient(145deg,#111,#1f1f1f);
-
-border:2px solid #ffde59;
-
-text-align:center;
-
-animation:popupShow 0.35s ease;
-}
-
-.popup-icon{
-
-font-size:62px;
-
-margin-bottom:12px;
-}
-
-.popup-icon.success{
-
-color:#00ff99;
-}
-
-.popup-icon.error{
-
-color:#ff4d6d;
-}
-
-.custom-popup h3{
-
-font-size:28px;
-
-color:#ffde59;
-
-margin-bottom:8px;
-}
-
-.custom-popup p{
-
-font-size:15px;
-
-line-height:22px;
-
-color:#fff;
-
-margin-bottom:22px;
-}
-
-.custom-popup button{
-
-width:100%;
-
-padding:13px;
-
-border:none;
-
-border-radius:16px;
-
-background:
-linear-gradient(145deg,#ffde59,#ffd000);
-
-color:#111;
-
-font-size:15px;
-
-font-weight:700;
-
-cursor:pointer;
-}
-
-@keyframes popupShow{
-
-0%{
-
-transform:scale(0.6);
-opacity:0;
-}
-
-100%{
-
-transform:scale(1);
-opacity:1;
-}
-
-}
-  .top-announcement{
-width:100%;
-background:linear-gradient(90deg,#ffde59,#ffd000);
-color:#111;
-font-weight:700;
-padding:10px 0;
-overflow:hidden;
-white-space:nowrap;
-position:relative;
-}
-
-.top-announcement span{
-display:inline-block;
-padding-left:100%;
-animation:scrollText 15s linear infinite;
-}
-
-@keyframes scrollText{
-0%{
-transform:translateX(0);
-}
-100%{
-transform:translateX(-100%);
-}
-}
-.join-ticker{
-margin-bottom:15px;
-background:linear-gradient(135deg,#00c6ff,#0072ff);
-color:#fff;
-padding:12px;
-border-radius:15px;
-font-weight:700;
-overflow:hidden;
-white-space:nowrap;
-}
-
-.join-ticker span{
-display:inline-block;
-padding-left:100%;
-animation:tickerMove 18s linear infinite;
-}
-
-@keyframes tickerMove{
-0%{
-transform:translateX(0);
-}
-100%{
-transform:translateX(-100%);
-}
-}
-
-
-
-
-
-
-
-
-
-
-  .offer-popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.8);
-backdrop-filter:blur(6px);
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:999999;
-}
-
-.offer-box{
-width:95%;
-max-width:340px;
-background:#111;
-border:2px solid #ffde59;
-border-radius:25px;
-padding:20px;
-text-align:center;
-position:relative;
-animation:popupAnim .4s ease;
-}
-
-.offer-img{
-width:100%;
-border-radius:18px;
-margin-bottom:15px;
-}
-
-.offer-box h3{
-color:#ffde59;
-font-size:24px;
-margin-bottom:10px;
-}
-
-.offer-box p{
-color:#fff;
-font-size:14px;
-line-height:22px;
-margin-bottom:15px;
-}
-
-.offer-btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:15px;
-background:linear-gradient(145deg,#ffde59,#ffd000);
-font-size:16px;
-font-weight:700;
-cursor:pointer;
-}
-
-.close-offer{
-position:absolute;
-top:10px;
-right:12px;
-background:none;
-border:none;
-color:white;
-font-size:20px;
-cursor:pointer;
-}
-
-@keyframes popupAnim{
-0%{
-transform:scale(.6);
-opacity:0;
-}
-
-100%{
-transform:scale(1);
-opacity:1;
-}
-}
-
+.custom-popup-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; background: rgba(0,0,0,0.7); backdrop-filter:blur(6px); z-index:99999; padding:15px; }
+.custom-popup{ width:100%; max-width:320px; padding:30px 22px; border-radius:28px; background: linear-gradient(145deg,#111,#1f1f1f); border:2px solid #ffde59; text-align:center; animation:popupShow 0.35s ease; }
+.popup-icon{ font-size:62px; margin-bottom:12px; }
+.popup-icon.success{ color:#00ff99; }
+.popup-icon.error{ color:#ff4d6d; }
+.custom-popup h3{ font-size:28px; color:#ffde59; margin-bottom:8px; }
+.custom-popup p{ font-size:15px; line-height:22px; color:#fff; margin-bottom:22px; }
+.custom-popup button{ width:100%; padding:13px; border:none; border-radius:16px; background: linear-gradient(145deg,#ffde59,#ffd000); color:#111; font-size:15px; font-weight:700; cursor:pointer; }
+
+@keyframes popupShow{ 0%{ transform:scale(0.6); opacity:0; } 100%{ transform:scale(1); opacity:1; } }
+
+.top-announcement{ width:100%; background:linear-gradient(90deg,#ffde59,#ffd000); color:#111; font-weight:700; padding:10px 0; overflow:hidden; white-space:nowrap; position:relative; }
+.top-announcement span{ display:inline-block; padding-left:100%; animation:scrollText 15s linear infinite; }
+@keyframes scrollText{ 0%{ transform:translateX(0); } 100%{ transform:translateX(-100%); } }
+
+.join-ticker{ margin-bottom:15px; background:linear-gradient(135deg,#00c6ff,#0072ff); color:#fff; padding:12px; border-radius:15px; font-weight:700; overflow:hidden; white-space:nowrap; }
+.join-ticker span{ display:inline-block; padding-left:100%; animation:tickerMove 18s linear infinite; }
+@keyframes tickerMove{ 0%{ transform:translateX(0); } 100%{ transform:translateX(-100%); } }
 </style>
 </head>
 <body>
-   <div class="top-announcement">
-<span>
-🔥 NEW ₹100 PLAN LAUNCHED 🔥 JOIN TODAY & START EARNING 💸 | 👑 PREMIUM ₹199 PLAN AVAILABLE | 🎁 DAILY BONUS | 🚀 LIMITED TIME OFFER
-</span>
-   </div>
+
+<div class="top-announcement">
+    <span>🔥 NEW ₹100 PLAN LAUNCHED 🔥 JOIN TODAY & START EARNING 💸 | 👑 PREMIUM ₹199 PLAN AVAILABLE | 🎁 DAILY BONUS | 🚀 LIMITED TIME OFFER</span>
+</div>
 
 <div class="header">
-
-<span id="userStatusBadge"
-class="status-badge pending">
-
-Checking...
-
-</span>
-
-<h2 id="userName">
-
----
-
-</h2>
-
-<p>
-
-Referral ID :
-<span id="myID"
-style="color:#ffde59;">
-
---
-
-</span>
-
-</p>
-
+    <span id="userStatusBadge" class="status-badge pending">Checking...</span>
+    <h2 id="userName">---</h2>
+    <p>Referral ID : <span id="myID" style="color:#ffde59;">--</span></p>
 </div>
 
 <div class="container">
-  <div class="join-ticker">
-  <span id="joinTicker">
-    🎉 Loading latest joins...
-  </span>
-  </div>
-  </div>
-      <div style="background: rgba(255, 222, 89, 0.05); border: 1px solid #ffde59; padding: 18px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; background: #ffde59; opacity: 0.1; filter: blur(40px); border-radius: 50%;"></div>
-        
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-            <span style="font-size: 22px;">📢</span>
-            <h4 style="color: #ffde59; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Important Notice</h4>
+    <div class="join-ticker">
+        <span id="joinTicker">🎉 Loading latest joins...</span>
+    </div>
+
+    <div class="bonus-card">
+        <h3>🎁 Daily Cashback</h3>
+        <p>Claim your reward every 24 hours</p>
+        <button id="claimBonusBtn" class="btn-bonus" disabled>Claim Daily Bonus</button>
+        <p id="bonusMsg" style="margin-top:10px;color:#ffde59;font-size:12px;"></p>
+    </div>
+
+    <div class="card-grid">
+        <div class="card">
+            <h3>Total Wallet</h3>
+            <p>₹<span id="wallet">0</span></p>
         </div>
-        
-        <p style="color: #fff; font-size: 13.5px; line-height: 22px; font-weight: 400; text-align: left; margin-bottom: 15px;">
-            🎉 DAILY ACTIVITY ALERT 🎉
-
-Group Activity Challenges Start Ho Chuke Hain!
-
-🏆 Participate Karo
-💰 Rewards Jeeto
-🚀 Active Raho
-
-Jitni Zyada Activity, Utne Zyada Reward Opportunities!
-
-📢 Group Ko Daily Check Karna Na Bhoolein.
-        </p>
-
-        <button onclick="window.location.href='https://chat.whatsapp.com/FP9vReZlbA34rgCjPIciWB?mode=gi_t'" style="width: 100%; padding: 12px; border: none; border-radius: 12px; background: #25D366; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); transition: 0.2s;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display: inline-block; vertical-align: middle;">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.717-1.454L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.428 2.01 13.96 1.01 11.32 1.01c-5.44 0-9.866 4.372-9.87 9.802 0 1.714.475 3.393 1.374 4.869l-.997 3.637 3.73-.978zm11.45-6.868c-.314-.157-1.86-.92-2.148-1.025-.289-.105-.499-.157-.708.157-.208.314-.808 1.025-.99 1.235-.181.208-.363.233-.677.075-1.353-.674-2.294-1.181-3.195-2.734-.238-.41.238-.38.682-1.268.075-.157.038-.293-.019-.41-.057-.116-.499-1.204-.683-1.648-.18-.431-.362-.373-.499-.38-.129-.007-.277-.008-.425-.008-.149 0-.391.056-.596.282-.204.226-.78.763-.78 1.86 0 1.096.8 2.152.91 2.302.112.15 1.574 2.404 3.814 3.374.533.23 1.037.388 1.393.501.536.17 1.022.146 1.405.089.428-.064 1.86-.763 2.122-1.463.262-.7.262-1.3.182-1.426-.08-.127-.289-.209-.604-.366z"/>
-            </svg>
-            🟢 JOIN WHATSAPP GROUP
-        </button>
-      </div>
-
-<div class="bonus-card">
-
-<h3>
-
-🎁 Daily Cashback
-
-</h3>
-
-<p>
-
-Claim your reward every 24 hours
-
-</p>
-
-<button id="claimBonusBtn"
-class="btn-bonus"
-disabled>
-
-Claim Daily Bonus
-
-</button>
-
-<p id="bonusMsg"
-style="margin-top:10px;color:#ffde59;font-size:12px;">
-
-</p>
-
-</div>
-  
-
-<div class="card-grid">
-
-<div class="card">
-
-<h3>Total Wallet</h3>
-
-<p>
-
-₹<span id="wallet">0</span>
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Pairs</h3>
-
-<p id="pairs">
-
-0
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Left Team</h3>
-
-<p id="leftTeam">
-
-0
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Right Team</h3>
-
-<p id="rightTeam">
-
-0
-
-</p>
-
-</div>
-
-</div>
-
-<div class="referral-box">
-
-<p>
-
-Your Referral Code
-
-</p>
-
-<button id="copyBtn">
-
-💸 COPY CODE 💸
-
-</button>
-
-</div>
-
-<button class="menu-btn"
-onclick="window.location.href='buy.html'">
-🛒 BUY PLAN
-</button>
-
-  
-  <button class="menu-btn"
-onclick="window.location.href='secret_code.html'">
-🧑‍💻 Secret Code
-  </button>
-  
-<button class="menu-btn"
-onclick="window.location.href='profile.html'">
-👤 ACCOUNT INFO
-</button>
-
-<button class="menu-btn"
-onclick="window.location.href='tree.html'">
-🌲 View My Team Tree
-</button>
-
-<button class="menu-btn"
-onclick="window.location.href='withdraw.html'">
-💰 WITHDRAWAL
-</button>
-
-
-<button class="menu-btn"
-onclick="window.location.href='history.html'">
-📜 HISTORY DETAILS
-</button>
-  
-  
-<button class="menu-btn"
-onclick="window.location.href='Leaderboard.html'">
-👬 LEADERBOARD
-</button>
-
-
-<button class="menu-btn"
-onclick="window.location.href='Terms.html'">
-📞 TERMS & SUPPORT
-</button>
-  
-  <button class="menu-btn"
-onclick="window.location.href='Details Page.html'">
-🗼 ABOUT DETAILS
-</button>
-
-<button id="logoutBtn"
-class="logout-btn">
-
-🚪 LOGOUT ACCOUNT
-
-</button>
-
+        <div class="card">
+            <h3>Pairs</h3>
+            <p id="pairs">0</p>
+        </div>
+        <div class="card">
+            <h3>Left Team</h3>
+            <p id="leftTeam">0</p>
+        </div>
+        <div class="card">
+            <h3>Right Team</h3>
+            <p id="rightTeam">0</p>
+        </div>
+    </div>
+
+    <div class="referral-box" id="refBoxContainer">
+        <p id="refTextLabel">Your Referral Code</p>
+        <button id="copyBtn">💸 COPY CODE 💸</button>
+    </div>
+
+    <button class="menu-btn" onclick="window.location.href='buy.html'">🛒 BUY PLAN</button>
+    <button class="menu-btn" onclick="window.location.href='profile.html'">👤 ACCOUNT INFO</button>
+    <button class="menu-btn" onclick="window.location.href='tree.html'">🌲 View My Team Tree</button>
+    <button class="menu-btn" onclick="window.location.href='withdraw.html'">💰 WITHDRAWAL</button>
+    <button class="menu-btn" onclick="window.location.href='history.html'">📜 HISTORY DETAILS</button>
+    <button class="menu-btn" onclick="window.location.href='Leaderboard.html'">👬 LEADERBOARD</button>
+    <button class="menu-btn" onclick="window.location.href='Terms.html'">📞 TERMS & SUPPORT</button>
+    <button class="menu-btn" onclick="window.location.href='Details Page.html'">🗼 ABOUT DETAILS</button>
+
+    <button id="logoutBtn" class="logout-btn">🚪 LOGOUT ACCOUNT</button>
 </div>
 
 <script type="module">
-  window.closeOffer = function(){
-
-document.getElementById("offerPopup").style.display="none";
-
-  }
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-}
-from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-onSnapshot,
-updateDoc,
-increment,
-collection,
-query,
-orderBy,
-limit
-}
-from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-
-/* FIREBASE */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, updateDoc, increment, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
-
-apiKey:"AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
-
-authDomain:"future-earn-20129.firebaseapp.com",
-
-projectId:"future-earn-20129",
-
-storageBucket:"future-earn-20129.firebasestorage.app",
-
-messagingSenderId:"64268879881",
-
-appId:"1:64268879881:web:07f81b5a0c82b9fce7d0d8"
-
+    apiKey: "AIzaSyD3aPz3uVF7acGZlxsozwrxB61hWsjW784",
+    authDomain: "future-earn-20129.firebaseapp.com",
+    projectId: "future-earn-20129",
+    storageBucket: "future-earn-20129.firebasestorage.app",
+    messagingSenderId: "64268879881",
+    appId: "1:64268879881:web:07f81b5a0c82b9fce7d0d8"
 };
 
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 let currentUserData = null;
+let timerInterval = null;
 
-/* POPUP */
-
-function showPopup(type,message){
-
-const popup =
-document.createElement("div");
-
-popup.className =
-"custom-popup-overlay";
-
-popup.innerHTML = `
-
-<div class="custom-popup">
-
-<div class="popup-icon ${type}">
-
-${type === "success" ? "✔" : "✖"}
-
-</div>
-
-<h3>
-
-${type === "success"
-? "Success"
-: "Error"}
-
-</h3>
-
-<p>${message}</p>
-
-<button id="closePopupBtn">
-
-OK
-
-</button>
-
-</div>
-
-`;
-
-document.body.appendChild(popup);
-
-document.getElementById(
-"closePopupBtn"
-).onclick = ()=>{
-
-popup.remove();
-
-};
-
+function showPopup(type, message){
+    const popup = document.createElement("div");
+    popup.className = "custom-popup-overlay";
+    popup.innerHTML = `
+        <div class="custom-popup">
+            <div class="popup-icon ${type}">${type === "success" ? "✔" : "✖"}</div>
+            <h3>${type === "success" ? "Success" : "Error"}</h3>
+            <p>${message}</p>
+            <button id="closePopupBtn">OK</button>
+        </div>
+    `;
+    document.body.appendChild(popup);
+    document.getElementById("closePopupBtn").onclick = () => { popup.remove(); };
 }
-
-/* TIMER */
 
 function startBonusTimer(seconds){
+    if(timerInterval) clearInterval(timerInterval);
+    const bonusBtn = document.getElementById("claimBonusBtn");
+    const bonusMsg = document.getElementById("bonusMsg");
+    bonusBtn.disabled = true;
 
-const bonusBtn =
-document.getElementById(
-"claimBonusBtn"
-);
+    timerInterval = setInterval(() => {
+        let h = Math.floor(seconds / 3600);
+        let m = Math.floor((seconds % 3600)/60);
+        let s = seconds % 60;
+        bonusMsg.innerText = `Next Bonus In ${h}h ${m}m ${s}s`;
+        seconds--;
 
-const bonusMsg =
-document.getElementById(
-"bonusMsg"
-);
-
-bonusBtn.disabled = true;
-
-const timer =
-setInterval(()=>{
-
-let h =
-Math.floor(seconds / 3600);
-
-let m =
-Math.floor((seconds % 3600)/60);
-
-let s =
-seconds % 60;
-
-bonusMsg.innerText =
-`Next Bonus In ${h}h ${m}m ${s}s`;
-
-seconds--;
-
-if(seconds < 0){
-
-clearInterval(timer);
-
-bonusBtn.disabled = false;
-
-bonusMsg.innerText =
-"You can claim bonus now!";
-
+        if(seconds < 0){
+            clearInterval(timerInterval);
+            // Sirf active users ko hi timer khatam hone par button enable ho
+            if(currentUserData && currentUserData.status === "active"){
+                bonusBtn.disabled = false;
+                bonusMsg.innerText = "You can claim bonus now!";
+            } else {
+                bonusBtn.disabled = true;
+                bonusMsg.innerText = "Activate account to claim bonus!";
+            }
+        }
+    }, 1000);
 }
 
-},1000);
+/* USER CONTROLLER WITH SECURITY FILTER */
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        const userRef = doc(db, "users", user.uid);
+        onSnapshot(userRef, (snap) => {
+            if(snap.exists()){
+                const data = snap.data();
+                currentUserData = data;
 
-}
+                document.getElementById("userName").innerText = data.fullName;
+                document.getElementById("wallet").innerText = data.wallet || 0;
+                document.getElementById("myID").innerText = data.referralCode || "--";
+                document.getElementById("pairs").innerText = data.pairsMatched || 0;
+                document.getElementById("leftTeam").innerText = data.leftCount || 0;
+                document.getElementById("rightTeam").innerText = data.rightCount || 0;
 
-/* USER */
+                const badge = document.getElementById("userStatusBadge");
+                const currentStatus = (data.status || "pending").toLowerCase();
+                badge.innerText = currentStatus.toUpperCase();
 
-onAuthStateChanged(auth,(user)=>{
+                // 🛑 CRITICAL RESTRICITON CODE: PENDING & BLOCKED ACCOUNTS LOCK LOGIC 🛑
+                if(currentStatus === "blocked" || currentStatus === "pending" || currentStatus === "deactive"){
+                    
+                    // 1. Badge class adjustment
+                    badge.className = `status-badge ${currentStatus === "blocked" ? "blocked_status" : "pending"}`;
+                    
+                    // 2. Daily bonus button freeze
+                    const bonusBtn = document.getElementById("claimBonusBtn");
+                    bonusBtn.disabled = true;
+                    if(timerInterval) clearInterval(timerInterval);
+                    document.getElementById("bonusMsg").innerText = "❌ Earnings Locked (Account Inactive/Blocked)";
 
-if(user){
+                    // 3. Hide/Block Referral Sharing Tools
+                    document.getElementById("myID").innerText = "LOCKED";
+                    document.getElementById("copyBtn").disabled = true;
+                    document.getElementById("refTextLabel").innerHTML = `<span style="color:#ff4d6d; font-weight:600;">❌ Link Locked (Activate to Unlock)</span>`;
 
-const userRef =
-doc(db,"users",user.uid);
+                    // 4. Freeze All Navigation Activity Links/Buttons
+                    const menuButtons = document.querySelectorAll('.menu-btn');
+                    menuButtons.forEach(btn => {
+                        btn.disabled = true;
+                    });
+                    
+                } else {
+                    // ✅ USER IS ACTIVE (NORMAL OPERATION)
+                    badge.className = "status-badge active";
+                    document.getElementById("copyBtn").disabled = false;
+                    document.getElementById("refTextLabel").innerText = "Your Referral Code";
 
-onSnapshot(userRef,(snap)=>{
+                    // Re-enable all menu buttons for active profiles
+                    const menuButtons = document.querySelectorAll('.menu-btn');
+                    menuButtons.forEach(btn => { btn.disabled = false; });
 
-if(snap.exists()){
+                    // Daily Bonus logic control
+                    const bonusBtn = document.getElementById("claimBonusBtn");
+                    const today = new Date().toDateString();
 
-const data =
-snap.data();
-
-currentUserData = data;
-
-document.getElementById(
-"userName"
-).innerText =
-data.fullName;
-
-document.getElementById(
-"wallet"
-).innerText =
-data.wallet || 0;
-
-document.getElementById(
-"myID"
-).innerText =
-data.referralCode;
-
-document.getElementById(
-"pairs"
-).innerText =
-data.pairsMatched || 0;
-
-document.getElementById(
-"leftTeam"
-).innerText =
-data.leftCount || 0;
-
-document.getElementById(
-"rightTeam"
-).innerText =
-data.rightCount || 0;
-
-const badge =
-document.getElementById(
-"userStatusBadge"
-);
-
-badge.innerText =
-data.status.toUpperCase();
-
-badge.className =
-`status-badge ${
-data.status === "active"
-? "active"
-: "pending"
-}`;
-
-const bonusBtn =
-document.getElementById(
-"claimBonusBtn"
-);
-
-const today =
-new Date().toDateString();
-
-if(
-data.status === "active"
-&&
-data.lastBonusDate !== today
-){
-
-bonusBtn.disabled = false;
-
-document.getElementById(
-"bonusMsg"
-).innerText =
-"You have 1 pending reward!";
-
-}else{
-
-bonusBtn.disabled = true;
-
-startBonusTimer(86400);
-
-}
-
-}
-
+                    if(data.lastBonusDate !== today){
+                        bonusBtn.disabled = false;
+                        document.getElementById("bonusMsg").innerText = "You have 1 pending reward!";
+                        if(timerInterval) clearInterval(timerInterval);
+                    } else {
+                        bonusBtn.disabled = true;
+                        startBonusTimer(86400);
+                    }
+                }
+            }
+        });
+    } else {
+        window.location.href = "index.html";
+    }
 });
 
-}else{
-
-window.location.href =
-"index.html";
-
-}
-
-});
-  /* LIVE JOIN TICKER */
-
-const latestQuery = query(
-collection(db,"users"),
-orderBy("createdAt","desc"),
-limit(5)
-);
-
-onSnapshot(latestQuery,(snap)=>{
-
-let text = "";
-
-snap.forEach((doc)=>{
-
-const u = doc.data();
-
-text += `🎉 ${u.fullName} joined ₹${u.plan} Plan • `;
-
+/* LIVE JOIN TICKER */
+const latestQuery = query(collection(db, "users"), orderBy("createdAt", "desc"), limit(5));
+onSnapshot(latestQuery, (snap) => {
+    let text = "";
+    snap.forEach((doc) => {
+        const u = doc.data();
+        if(u.fullName && u.plan){
+            text += `🎉 ${u.fullName} joined ₹${u.plan} Plan • `;
+        }
+    });
+    document.getElementById("joinTicker").innerText = text || "🎉 Waiting for new users...";
 });
 
-document.getElementById(
-"joinTicker"
-).innerText = text;
+/* BONUS CLAIM SECURED TRIGGER */
+document.getElementById("claimBonusBtn").onclick = async () => {
+    if(!currentUserData) return;
 
-});
+    // Double security layer checks status before writing inside cloud firestore
+    const checkStatus = (currentUserData.status || "pending").toLowerCase();
+    if(checkStatus === "blocked" || checkStatus === "pending" || checkStatus === "deactive"){
+        showPopup("error", "Your account state cannot trigger wallet adjustments!");
+        return;
+    }
 
-/* BONUS CLAIM */
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    const today = new Date().toDateString();
 
-document.getElementById(
-"claimBonusBtn"
-).onclick = async ()=>{
-
-if(!currentUserData) return;
-
-const userRef =
-doc(
-db,
-"users",
-auth.currentUser.uid
-);
-
-const today =
-new Date().toDateString();
-
-try{
-
-await updateDoc(userRef,{
-
-wallet:increment(2),
-
-lastBonusDate:today
-
-});
-
-showPopup(
-"success",
-"₹2 Daily Bonus Added Successfully!"
-);
-
-startBonusTimer(86400);
-
-}catch(e){
-
-showPopup(
-"error",
-"Bonus Claim Failed!"
-);
-
-}
-
+    try{
+        await updateDoc(userRef, {
+            wallet: increment(2),
+            lastBonusDate: today
+        });
+        showPopup("success", "₹2 Daily Bonus Added Successfully!");
+        startBonusTimer(86400);
+    }catch(e){
+        showPopup("error", "Bonus Claim Failed!");
+    }
 };
 
-/* COPY CODE */
-
-document.getElementById(
-"copyBtn"
-).onclick = ()=>{
-
-const code =
-document.getElementById(
-"myID"
-).innerText;
-
-navigator.clipboard.writeText(code);
-
-showPopup(
-"success",
-"Referral Code Copied!"
-);
-
+/* COPY CODE TRIGGER */
+document.getElementById("copyBtn").onclick = () => {
+    const checkStatus = (currentUserData.status || "pending").toLowerCase();
+    if(checkStatus === "blocked" || checkStatus === "pending" || checkStatus === "deactive"){
+        showPopup("error", "Link is locked until registration activation completes!");
+        return;
+    }
+    const code = document.getElementById("myID").innerText;
+    navigator.clipboard.writeText(code);
+    showPopup("success", "Referral Code Copied!");
 };
 
-/* LOGOUT */
-
-document.getElementById(
-"logoutBtn"
-).onclick = ()=>{
-
-signOut(auth);
-
+/* LOGOUT ACTIONS */
+document.getElementById("logoutBtn").onclick = () => {
+    if(timerInterval) clearInterval(timerInterval);
+    signOut(auth);
 };
-
-
-
-  
-
 </script>
-
-  <!-- OFFER POPUP -->
-
-<div id="offerPopup" class="offer-popup">
-
-<div class="offer-box">
-
-<button class="close-offer" onclick="closeOffer()">
-✖
-</button>
-
-<img src="offer.jpg" class="offer-img">
-
-<h3>🎁 Special Offer Coming </h3>
-
-<p>
-  🚀🔥 FUTURE EARNING 🔥🚀
-
-🎉 SUNDAY SPECIAL OFFER 🎉
-💰 Direct Income Increase 💰
-
-✅ अब Direct Income बढ़ाकर ₹120 कर दी गई है
-
-</p>
-
-<button class="offer-btn" onclick="closeOffer()">
-🔥 Sunday Ko big dhamaal offer 🎁 🔥
-</button>
-
-</div>
-
-</div>
 </body>
 </html>
